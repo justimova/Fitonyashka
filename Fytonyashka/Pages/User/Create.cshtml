@@ -1,0 +1,30 @@
+@page
+@model Fytonyashka.Pages.User.CreateModel
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<div class="container">
+    <h2>Create New User</h2>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="UserInput.Username">Username</label>
+            <input asp-for="UserInput.Username" class="form-control" />
+            <span asp-validation-for="UserInput.Username" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="UserInput.Email">Email</label>
+            <input asp-for="UserInput.Email" class="form-control" type="email" />
+            <span asp-validation-for="UserInput.Email" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="UserInput.Password">Password</label>
+            <input asp-for="UserInput.Password" class="form-control" type="password" />
+            <span asp-validation-for="UserInput.Password" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">Create User</button>
+    </form>
+</div>
