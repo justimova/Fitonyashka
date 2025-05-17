@@ -39,6 +39,29 @@ button.accept-policy {
   line-height: inherit;
 }
 
+.nav-item {
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    color: var(--bs-light) !important;
+    /*background-color: var(--bs-blue);*/
+    border-radius: 4px;
+    transform: translateY(-1px);
+    font-weight: 700;
+}
+
+.nav-item.active {
+    color: var(--bs-light) !important;
+    background: var(--bs-blue); /* rgb(23, 162, 184) !important;*/
+    border-radius: 4px;
+}
+
+.nav-item.active:hover {
+    transform: none;
+    font-weight: inherit;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
