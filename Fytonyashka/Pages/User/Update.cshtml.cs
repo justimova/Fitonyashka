@@ -38,7 +38,7 @@ namespace Fytonyashka.Pages.User
                 Email = UserInput.Email,
                 Password = UserInput.Password
             });
-            return RedirectToPage("/Index");
+            return RedirectToPage("/User/Users");
         }
     }
 }
