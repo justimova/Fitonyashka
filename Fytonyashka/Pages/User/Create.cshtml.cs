@@ -33,7 +33,7 @@ namespace Fytonyashka.Pages.User
 
             if (result)
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("/User/Users");
             }
             
             ModelState.AddModelError("", "Failed to create user");
