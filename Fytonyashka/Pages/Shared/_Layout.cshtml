@@ -29,6 +29,25 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/User/Users">Admin panel</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("Username") != null)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-dark me-2">@Context.Session.GetString("Username")</span>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-page="/Account/Logout">
+                                    <button type="submit" class="nav-link text-dark btn btn-outline-danger">Sign Out</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-outline-primary" asp-area="" asp-page="/Account/Login">Sign In</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -10,6 +10,7 @@ namespace Fytonyashka.Services
         bool Delete(int id);
         UserDto GetById(int id);
         bool Update(UserDto userDto);
+        UserDto GetByUsername(string username);
     }
 
     internal class UserService : IUserService
@@ -93,6 +94,16 @@ namespace Fytonyashka.Services
             user.Email = userDto.Email;
             SaveToFile();
             return true;
+        }
+
+        public UserDto GetByUsername(string username) {
+            foreach (UserDto user in _users) {
+                if (user.UserName == username)
+                {
+                    return user;
+                }
+            }
+            return null;
         }
     }
 }

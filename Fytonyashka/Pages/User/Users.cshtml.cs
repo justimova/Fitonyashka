@@ -1,4 +1,4 @@
-using Fytonyashka.Pages.User;
+using Fytonyashka.DataModels;
 using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +11,7 @@ namespace Fytonyashka.Pages
         private readonly IUserService _userService;
 
         [BindProperty]
-        public List<UserInputModel> Users { get; set; }
+        public List<UserInputModel> Users { get; set; } = new List<UserInputModel>();
 
         public UsersModel(ILogger<UsersModel> logger, IUserService userService)
         {
