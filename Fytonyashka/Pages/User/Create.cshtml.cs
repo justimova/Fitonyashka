@@ -2,17 +2,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Fytonyashka.Services;
 using Fytonyashka.DTOs;
-using Fytonyashka.DataModels;
+using Fytonyashka.Pages.DataModels;
 
 namespace Fytonyashka.Pages.User
 {
     public class CreateModel : PageModel
     {
         private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
 
-        public CreateModel(IUserService userService)
+        public CreateModel(IUserService userService, IAccountService accountService)
         {
             _userService = userService;
+            _accountService = accountService;
         }
 
         [BindProperty]
@@ -30,6 +32,7 @@ namespace Fytonyashka.Pages.User
             userDto.Password = UserInput.Password;
 
             var result = _userService.Create(userDto);
+            _accountService.Create(userDto);
 
             if (result)
             {

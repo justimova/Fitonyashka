@@ -31,6 +31,7 @@ namespace Fytonyashka.Services
                 Load();
             }
         }
+
         private void Load() {
             string userJsons = File.ReadAllText(_dataFilePath);
             _users = JsonSerializer.Deserialize<List<UserDto>>(userJsons) ?? new List<UserDto>();
@@ -90,7 +91,9 @@ namespace Fytonyashka.Services
             if (user == null) {
                 return false;
             }
-            user.Password = userDto.Password;
+            if (!string.IsNullOrEmpty(userDto.Password)) {
+                user.Password = userDto.Password;
+            }
             user.Email = userDto.Email;
             SaveToFile();
             return true;
@@ -98,8 +101,7 @@ namespace Fytonyashka.Services
 
         public UserDto GetByUsername(string username) {
             foreach (UserDto user in _users) {
-                if (user.UserName == username)
-                {
+                if (user.UserName == username) {
                     return user;
                 }
             }
