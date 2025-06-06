@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class LogoutModel : PageModel
 {
-    private readonly IAccountService _accountService;
+    private readonly IUserService _userService;
 
-    public LogoutModel(IAccountService accountService) {
-        _accountService = accountService;
+    public LogoutModel(IUserService userService) {
+        _userService = userService;
     }
 
     public IActionResult OnPost(){
         string? username = HttpContext.Session?.GetString("Username");
-        _accountService.Logout(username);
+        _userService.Logout(username);
         HttpContext.Session?.Remove("Username");
+        HttpContext.Session?.Remove("UserId");
         return RedirectToPage("/Index");
     }
 }

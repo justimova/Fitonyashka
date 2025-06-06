@@ -9,21 +9,16 @@ namespace Fytonyashka.Pages.User
     public class CreateModel : PageModel
     {
         private readonly IUserService _userService;
-        private readonly IAccountService _accountService;
 
-        public CreateModel(IUserService userService, IAccountService accountService)
-        {
+        public CreateModel(IUserService userService) {
             _userService = userService;
-            _accountService = accountService;
         }
 
         [BindProperty]
         public UserInputModel UserInput { get; set; }
 
-        public IActionResult OnPost()
-        {
-            if (!ModelState.IsValid)
-            {
+        public IActionResult OnPost() {
+            if (!ModelState.IsValid) {
                 return Page();
             }
             UserDto userDto = new UserDto();
@@ -32,10 +27,8 @@ namespace Fytonyashka.Pages.User
             userDto.Password = UserInput.Password;
 
             var result = _userService.Create(userDto);
-            _accountService.Create(userDto);
 
-            if (result)
-            {
+            if (result) {
                 return RedirectToPage("/User/Users");
             }
             

@@ -1,8 +1,29 @@
 ﻿@page
 @model IndexModel
-@{
+@{    
     ViewData["Title"] = "Home page";
 }
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
+    @if (HttpContext.Session.GetString("Username") != null)
+    {        
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col">
+                    <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Weights'">Your weight</button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {        
+        <div class="container">
+            <h2>Please sign in to track your weight</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <button type="button" class="btn btn-primary" onclick="location.href='/Account/Login'">Sign In</button>
+                </div>
+            </div>
+        </div>
+    }
 </div>

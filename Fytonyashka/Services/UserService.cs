@@ -6,6 +6,8 @@ namespace Fytonyashka.Services
     public interface IUserService
     {
         bool Create(UserDto userDto);
+        bool Login(string username, string password);
+        void Logout(string username);
         List<UserDto> GetAll();
         bool Delete(int id);
         UserDto GetById(int id);
@@ -18,6 +20,7 @@ namespace Fytonyashka.Services
         private int _nextId = 1;
         private readonly string _dataFilePath;
         private List<UserDto> _users = new();
+        private List<string> LoggedUserNames { get; set; } = new List<string>();
 
         public UserService() {
             string baseDirectory = Directory.GetCurrentDirectory();
@@ -95,6 +98,9 @@ namespace Fytonyashka.Services
                 user.Password = userDto.Password;
             }
             user.Email = userDto.Email;
+            user.Birthday = userDto.Birthday;
+            user.Height = userDto.Height;
+            user.FirstName = userDto.FirstName;
             SaveToFile();
             return true;
         }
@@ -106,6 +112,24 @@ namespace Fytonyashka.Services
                 }
             }
             return null;
+        }
+
+        public bool Login(string username, string password) {
+            UserDto user = GetByUsername(username);
+            if (user == null) {
+                return false;
+            }
+            if (user.Password == password) {
+                LoggedUserNames.Add(username);
+                return true;
+            }
+            return false;
+        }
+
+        public void Logout(string username) {
+            if (LoggedUserNames.Contains(username)) {
+                LoggedUserNames.Remove(username);
+            }
         }
     }
 }

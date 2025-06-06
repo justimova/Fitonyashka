@@ -7,13 +7,13 @@ namespace Fytonyashka.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly IAccountService _accountService;
+        private readonly IUserService _userService;
 
         [BindProperty]
         public LoginInputModel LoginInput { get; set; } = new LoginInputModel();
 
-        public LoginModel(IAccountService accountService) {
-            _accountService = accountService;
+        public LoginModel(IUserService userService) {
+            _userService = userService;
         }
 
         public IActionResult OnPost() {
@@ -21,9 +21,10 @@ namespace Fytonyashka.Pages.Account
                 return Page();
             }
 
-            if (_accountService.Login(LoginInput.UserName, LoginInput.Password))
+            if (_userService.Login(LoginInput.UserName, LoginInput.Password))
             {
                 HttpContext.Session.SetString("Username", LoginInput.UserName);
+                HttpContext.Session.SetInt32("UserId", _userService.GetByUsername(LoginInput.UserName)?.Id ?? 0);
                 return RedirectToPage("/Index");
             }
 

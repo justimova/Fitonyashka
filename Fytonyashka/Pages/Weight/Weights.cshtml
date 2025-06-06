@@ -1,0 +1,35 @@
+@page
+@model WeightModel
+@{
+    ViewData["Title"] = "Weight";
+}
+
+<div class="text-center mb-4">
+    <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Create/@HttpContext.Session.GetInt32("UserId")';">Enter weight</button>
+</div>
+
+<div class="container">
+    <div class="d-flex flex-wrap gap-3">
+        @foreach (var weight in Model.Weights)
+        {
+            <div class="user-card flex-grow-0" style="min-width: 300px; flex-basis: calc(33.333% - 1rem);">
+                <div class="border rounded p-3 h-100">
+                    <div class="d-flex flex-column h-100">
+                        <div class="mb-2">
+                            @weight.Date.ToShortDateString()
+                        </div>
+                        <div class="mb-3">
+                            <strong>@weight.Weight</strong> kg
+                        </div>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-warning flex-grow-1" onclick="location.href='/Weight/Update/@weight.Id'">Edit</button>
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@weight.Id" class="flex-grow-1">
+                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

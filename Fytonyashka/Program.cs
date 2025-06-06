@@ -12,7 +12,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IAccountService, AccountService>();
+builder.Services.AddSingleton<IWeightService, WeightService>();
 
 var app = builder.Build();
 

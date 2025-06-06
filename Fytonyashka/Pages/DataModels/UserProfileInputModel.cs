@@ -1,10 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Fytonyashka.Pages.DataModels;
+
 public class UserProfileInputModel
 {
     public int Id { get; set; }
-    
+
+    public DateTime Birthday { get; set; } = DateTime.UtcNow;
+
+    public string FirstName { get; set; } = "";
+
+    public int Height { get; set; } = 0;
+
     [Required]
     [StringLength(50, MinimumLength = 3)]
     public string Username { get; set; }

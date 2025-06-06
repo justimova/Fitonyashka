@@ -9,15 +9,13 @@ namespace Fytonyashka.Pages
     {
         private readonly ILogger<UsersModel> _logger;
         private readonly IUserService _userService;
-        private readonly IAccountService _accountService;
 
         [BindProperty]
         public List<UserInputModel> Users { get; set; } = new List<UserInputModel>();
 
-        public UsersModel(ILogger<UsersModel> logger, IUserService userService, IAccountService accountService) {
+        public UsersModel(ILogger<UsersModel> logger, IUserService userService) {
             _logger = logger;
             _userService = userService; 
-            _accountService = accountService;
         }
 
         public void OnGet() {
@@ -33,7 +31,6 @@ namespace Fytonyashka.Pages
             if (!result) {
                 TempData["Error"] = "Failed to delete user";
             }
-            _accountService.DeleteByUserId(id);
             return RedirectToPage();
         }
     }

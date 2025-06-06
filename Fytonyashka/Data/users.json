@@ -2,7 +2,10 @@
   {
     "Id": 1,
     "UserName": "111",
-    "Email": "1156@gmail.com",
-    "Password": "111111"
+    "Email": "111@gg.com",
+    "Password": "111111",
+    "FirstName": null,
+    "Birthday": "0001-01-01T00:00:00",
+    "Height": 0
   }
 ]
