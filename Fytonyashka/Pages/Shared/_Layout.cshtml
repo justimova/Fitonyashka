@@ -32,7 +32,12 @@
                     <ul class="navbar-nav">
                         @if (Context.Session.GetString("Username") != null)
                         {
-                            <li class="nav-item">
+                            <li class="nav-item d-flex align-items-center">
+                                <img src="@("/UserImages/" + System.IO.Path.GetFileName(Context.Session.GetString("AvatarPath")))" 
+                                    alt="User Avatar" 
+                                    class="rounded-circle me-2" 
+                                    style="width: 32px; height: 32px; object-fit: cover;" 
+                                    onerror="this.src='@Url.Content("~/img/default-avatar.png")'" />
                                 <a class="nav-link text-dark me-2" asp-page="/Account/UserProfile">@Context.Session.GetString("Username")</a>
                             </li>
                             <li class="nav-item">

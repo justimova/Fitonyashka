@@ -13,6 +13,8 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IWeightService, WeightService>();
+builder.Services.AddSingleton<IFileService, FileService>();
+builder.Services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
 
 var app = builder.Build();
 

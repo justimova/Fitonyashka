@@ -9,11 +9,19 @@ namespace Fytonyashka.Pages.Account
     public class UserProfileModel : PageModel
     {
         private readonly IUserService _userService;
+        private readonly IFileService _fileService;
+        private readonly IStaticFilePublisher _staticFilePublisher;
+        
         [BindProperty]
-        public UserProfileInputModel UserPrifileInput { get; set; } = new UserProfileInputModel();
+        public IFormFile? AvatarFile { get; set; }
 
-        public UserProfileModel(IUserService userService) {
+        [BindProperty]
+        public UserProfileInputModel UserProfileInput { get; set; } = new UserProfileInputModel();
+
+        public UserProfileModel(IUserService userService, IFileService fileService, IStaticFilePublisher staticFilePublisher) {
             _userService = userService;
+            _fileService = fileService;
+            _staticFilePublisher = staticFilePublisher;
         }
         
         public IActionResult OnGet() { 
@@ -22,29 +30,37 @@ namespace Fytonyashka.Pages.Account
             if (userDto == null) {
                 return NotFound(); // TODO: #2
             }
-            UserPrifileInput = new UserProfileInputModel {
+            UserProfileInput = new UserProfileInputModel {
                 Id = userDto.Id,
                 Username = userDto.UserName,
                 Email = userDto.Email,
                 Birthday = userDto.Birthday,
                 FirstName = userDto.FirstName,
-                Height = userDto.Height
+                Height = userDto.Height,
+                AvatarPath = userDto.AvatarPath
             };
             return Page();
         }
 
-        public IActionResult OnPost() {
+        public async Task<IActionResult> OnPostAsync()
+        {
             if (!ModelState.IsValid) {
                 return Page();
             }
-            _userService.Update(new UserDto { // TODO: #2
-                Id = UserPrifileInput.Id,
-                UserName = UserPrifileInput.Username,
-                Email = UserPrifileInput.Email,
-                FirstName = UserPrifileInput.FirstName,
-                Birthday = UserPrifileInput.Birthday,
-                Height = UserPrifileInput.Height
+
+            string avatarPath = await _fileService.UploadFileAsync("UserImages", UserProfileInput.Id, AvatarFile);
+
+            _userService.Update(new UserDto {
+                Id = UserProfileInput.Id,
+                UserName = UserProfileInput.Username,
+                Email = UserProfileInput.Email,
+                FirstName = UserProfileInput.FirstName,
+                Birthday = UserProfileInput.Birthday,
+                Height = UserProfileInput.Height,
+                AvatarPath = avatarPath
             });
+
+            _staticFilePublisher.Publish(avatarPath, "UserImages");
             return RedirectToPage("/Account/UserProfile");
         }
     }

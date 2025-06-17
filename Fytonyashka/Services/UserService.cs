@@ -101,6 +101,7 @@ namespace Fytonyashka.Services
             user.Birthday = userDto.Birthday;
             user.Height = userDto.Height;
             user.FirstName = userDto.FirstName;
+            user.AvatarPath = userDto.AvatarPath;
             SaveToFile();
             return true;
         }

@@ -23,8 +23,10 @@ namespace Fytonyashka.Pages.Account
 
             if (_userService.Login(LoginInput.UserName, LoginInput.Password))
             {
+                var userDto = _userService.GetByUsername(LoginInput.UserName);
                 HttpContext.Session.SetString("Username", LoginInput.UserName);
-                HttpContext.Session.SetInt32("UserId", _userService.GetByUsername(LoginInput.UserName)?.Id ?? 0);
+                HttpContext.Session.SetString("AvatarPath", userDto?.AvatarPath ?? "");
+                HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
                 return RedirectToPage("/Index");
             }
 
