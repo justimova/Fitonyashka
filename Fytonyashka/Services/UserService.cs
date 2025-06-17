@@ -6,10 +6,13 @@ namespace Fytonyashka.Services
     public interface IUserService
     {
         bool Create(UserDto userDto);
+        bool Login(string username, string password);
+        void Logout(string username);
         List<UserDto> GetAll();
         bool Delete(int id);
         UserDto GetById(int id);
         bool Update(UserDto userDto);
+        UserDto GetByUsername(string username);
     }
 
     internal class UserService : IUserService
@@ -17,6 +20,7 @@ namespace Fytonyashka.Services
         private int _nextId = 1;
         private readonly string _dataFilePath;
         private List<UserDto> _users = new();
+        private List<string> LoggedUserNames { get; set; } = new List<string>();
 
         public UserService() {
             string baseDirectory = Directory.GetCurrentDirectory();
@@ -30,6 +34,7 @@ namespace Fytonyashka.Services
                 Load();
             }
         }
+
         private void Load() {
             string userJsons = File.ReadAllText(_dataFilePath);
             _users = JsonSerializer.Deserialize<List<UserDto>>(userJsons) ?? new List<UserDto>();
@@ -89,10 +94,43 @@ namespace Fytonyashka.Services
             if (user == null) {
                 return false;
             }
-            user.Password = userDto.Password;
+            if (!string.IsNullOrEmpty(userDto.Password)) {
+                user.Password = userDto.Password;
+            }
             user.Email = userDto.Email;
+            user.Birthday = userDto.Birthday;
+            user.Height = userDto.Height;
+            user.FirstName = userDto.FirstName;
+            user.AvatarPath = userDto.AvatarPath;
             SaveToFile();
             return true;
+        }
+
+        public UserDto GetByUsername(string username) {
+            foreach (UserDto user in _users) {
+                if (user.UserName == username) {
+                    return user;
+                }
+            }
+            return null;
+        }
+
+        public bool Login(string username, string password) {
+            UserDto user = GetByUsername(username);
+            if (user == null) {
+                return false;
+            }
+            if (user.Password == password) {
+                LoggedUserNames.Add(username);
+                return true;
+            }
+            return false;
+        }
+
+        public void Logout(string username) {
+            if (LoggedUserNames.Contains(username)) {
+                LoggedUserNames.Remove(username);
+            }
         }
     }
 }

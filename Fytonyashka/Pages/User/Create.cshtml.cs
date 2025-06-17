@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
 using Fytonyashka.Services;
 using Fytonyashka.DTOs;
+using Fytonyashka.Pages.DataModels;
 
 namespace Fytonyashka.Pages.User
 {
@@ -10,18 +10,15 @@ namespace Fytonyashka.Pages.User
     {
         private readonly IUserService _userService;
 
-        public CreateModel(IUserService userService)
-        {
+        public CreateModel(IUserService userService) {
             _userService = userService;
         }
 
         [BindProperty]
         public UserInputModel UserInput { get; set; }
 
-        public IActionResult OnPost()
-        {
-            if (!ModelState.IsValid)
-            {
+        public IActionResult OnPost() {
+            if (!ModelState.IsValid) {
                 return Page();
             }
             UserDto userDto = new UserDto();
@@ -31,31 +28,12 @@ namespace Fytonyashka.Pages.User
 
             var result = _userService.Create(userDto);
 
-            if (result)
-            {
+            if (result) {
                 return RedirectToPage("/User/Users");
             }
             
             ModelState.AddModelError("", "Failed to create user");
             return Page();
         }
-    }
-
-    public class UserInputModel
-    {
-        public int Id { get; set; }
-        
-        [Required]
-        [StringLength(50, MinimumLength = 3)]
-        public string Username { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(100, MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
     }
 }

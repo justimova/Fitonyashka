@@ -1,0 +1,50 @@
+@page
+@model Fytonyashka.Pages.Account.UserProfileModel
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="container">
+    <h2>Your Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="UserProfileInput.Id" />
+
+        <div class="form-group mb-3">
+            <label asp-for="AvatarFile">Profile Picture</label>
+            <div class="avatar-preview">
+                <img src="@("/UserImages/" + System.IO.Path.GetFileName(Model.UserProfileInput.AvatarPath))" class="user-avatar"/>
+                <img asp-for="UserProfileInput.AvatarUrl" class="avatar-image" />
+            </div>
+            <input type="file" asp-for="AvatarFile" class="form-control" accept="image/*" />
+            <span asp-validation-for="AvatarFile" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UserProfileInput.Username">Username</label>
+            <input asp-for="UserProfileInput.Username" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UserProfileInput.Email">Email</label>
+            <input asp-for="UserProfileInput.Email" class="form-control" type="email" />
+            <span asp-validation-for="UserProfileInput.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UserProfileInput.FirstName">First name</label>
+            <input asp-for="UserProfileInput.FirstName" class="form-control" type="text" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UserProfileInput.Birthday">Birthday</label>
+            <input asp-for="UserProfileInput.Birthday" class="form-control" type="date" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UserProfileInput.Height">Height (cm)</label>
+            <input asp-for="UserProfileInput.Height" class="form-control" type="number" />
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Save</button>
+    </form>
+</div>

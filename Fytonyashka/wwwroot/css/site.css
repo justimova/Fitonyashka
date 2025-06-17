@@ -16,3 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}

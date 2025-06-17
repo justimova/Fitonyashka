@@ -1,0 +1,28 @@
+@page
+@model Fytonyashka.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12" style="max-width: 500px;">
+            <h2>Sign in</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="LoginInput.UserName">Username</label>
+                    <input asp-for="LoginInput.UserName" class="form-control" />
+                    <span asp-validation-for="LoginInput.UserName" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="LoginInput.Password">Password</label>
+                    <input asp-for="LoginInput.Password" class="form-control" type="password" />
+                    <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-3">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>

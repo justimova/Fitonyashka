@@ -1,4 +1,4 @@
-using Fytonyashka.Pages.User;
+using Fytonyashka.Pages.DataModels;
 using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,16 +11,14 @@ namespace Fytonyashka.Pages
         private readonly IUserService _userService;
 
         [BindProperty]
-        public List<UserInputModel> Users { get; set; }
+        public List<UserInputModel> Users { get; set; } = new List<UserInputModel>();
 
-        public UsersModel(ILogger<UsersModel> logger, IUserService userService)
-        {
+        public UsersModel(ILogger<UsersModel> logger, IUserService userService) {
             _logger = logger;
-            _userService = userService;
+            _userService = userService; 
         }
 
-        public void OnGet()
-        {
+        public void OnGet() {
             Users = _userService.GetAll().Select(u => new UserInputModel {
                 Id = u.Id,
                 Username = u.UserName,
@@ -28,11 +26,9 @@ namespace Fytonyashka.Pages
             }).ToList();
         }
 
-        public IActionResult OnPostDelete(int id)
-        {
+        public IActionResult OnPostDelete(int id) {
             var result = _userService.Delete(id);
-            if (!result)
-            {
+            if (!result) {
                 TempData["Error"] = "Failed to delete user";
             }
             return RedirectToPage();
