@@ -3,6 +3,7 @@ namespace Fytonyashka.Services;
 public interface IStaticFilePublisher
 {
     void Publish(string sourceFilePath, string targetDirectoryPath);
+    void Delete(string fileName, string targetDirectoryPath);
 }
 
 internal class StaticFilePublisher : IStaticFilePublisher
@@ -21,5 +22,13 @@ internal class StaticFilePublisher : IStaticFilePublisher
         }
         string targetFilePath = Path.Combine(dirPath, fileName);
         File.Copy(sourceFilePath, targetFilePath, true);
+    }
+
+    public void Delete(string fileName, string targetDirectoryPath) {
+        string targetFilePath = Path.Combine(_webHostEnvironment.WebRootPath, targetDirectoryPath,
+            fileName);
+        if (File.Exists(targetFilePath)) {
+            File.Delete(targetFilePath);
+        }
     }
 }

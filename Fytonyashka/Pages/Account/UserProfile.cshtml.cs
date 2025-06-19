@@ -37,18 +37,26 @@ namespace Fytonyashka.Pages.Account
                 Birthday = userDto.Birthday,
                 FirstName = userDto.FirstName,
                 Height = userDto.Height,
-                AvatarPath = userDto.AvatarPath
+                AvatarFileName = userDto.AvatarFileName
             };
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
+        public async Task<IActionResult> OnPostAsync() {
             if (!ModelState.IsValid) {
                 return Page();
             }
 
-            string avatarPath = await _fileService.UploadFileAsync("UserImages", UserProfileInput.Id, AvatarFile);
+            string fileName = UserProfileInput.AvatarFileName;
+            if (AvatarFile != null) {
+                string avatarPath = await _fileService.UploadFileAsync("UserImages", UserProfileInput.Id, AvatarFile);
+                _staticFilePublisher.Publish(avatarPath, "UserImages");
+                if (!string.IsNullOrEmpty(fileName)) {
+                    await _fileService.DeleteFileAsync("UserImages", fileName);
+                    _staticFilePublisher.Delete(fileName, "UserImages");
+                }
+                fileName = Path.GetFileName(avatarPath);
+            }
 
             _userService.Update(new UserDto {
                 Id = UserProfileInput.Id,
@@ -57,10 +65,21 @@ namespace Fytonyashka.Pages.Account
                 FirstName = UserProfileInput.FirstName,
                 Birthday = UserProfileInput.Birthday,
                 Height = UserProfileInput.Height,
-                AvatarPath = avatarPath
+                AvatarFileName = fileName
             });
 
-            _staticFilePublisher.Publish(avatarPath, "UserImages");
+            if (!string.IsNullOrEmpty(fileName)) {
+                HttpContext.Session.SetString("AvatarFileName", fileName);
+            } else {
+                HttpContext.Session?.Remove("AvatarFileName");
+            }
+            return RedirectToPage("/Account/UserProfile");
+        }
+
+        public async Task<IActionResult> OnPostDeleteAvatarAsync() {
+            await _fileService.DeleteFileAsync("UserImages", UserProfileInput.AvatarFileName);
+            _userService.RemoveAvatar(UserProfileInput.Id);
+            _staticFilePublisher.Delete(UserProfileInput.AvatarFileName, "UserImages");
             return RedirectToPage("/Account/UserProfile");
         }
     }

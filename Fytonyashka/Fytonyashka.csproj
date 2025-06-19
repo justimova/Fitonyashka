@@ -9,4 +9,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\UserImages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\UserImages\" />
+    <Folder Include="Data\UserImages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Data\UserImages\" />
+  </ItemGroup>
 </Project>

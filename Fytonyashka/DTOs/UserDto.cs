@@ -9,5 +9,5 @@ public class UserDto
     public string FirstName { get; set; }
     public DateTime Birthday { get; set; }
     public int Height { get; set; }
-    public string AvatarPath { get; set; }
+    public string AvatarFileName { get; set; }
 }

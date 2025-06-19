@@ -13,6 +13,7 @@ namespace Fytonyashka.Services
         UserDto GetById(int id);
         bool Update(UserDto userDto);
         UserDto GetByUsername(string username);
+        void RemoveAvatar(int id);
     }
 
     internal class UserService : IUserService
@@ -101,7 +102,7 @@ namespace Fytonyashka.Services
             user.Birthday = userDto.Birthday;
             user.Height = userDto.Height;
             user.FirstName = userDto.FirstName;
-            user.AvatarPath = userDto.AvatarPath;
+            user.AvatarFileName = userDto.AvatarFileName;
             SaveToFile();
             return true;
         }
@@ -130,6 +131,14 @@ namespace Fytonyashka.Services
         public void Logout(string username) {
             if (LoggedUserNames.Contains(username)) {
                 LoggedUserNames.Remove(username);
+            }
+        }
+
+        public void RemoveAvatar(int id) {
+            UserDto user = GetById(id);
+            if (user != null) {
+                user.AvatarFileName = null;
+                Update(user);
             }
         }
     }

@@ -17,7 +17,7 @@ public class LogoutModel : PageModel
         _userService.Logout(username);
         HttpContext.Session?.Remove("Username");
         HttpContext.Session?.Remove("UserId");
-        HttpContext.Session?.Remove("AvatarPath");
+        HttpContext.Session?.Remove("AvatarFileName");
         return RedirectToPage("/Index");
     }
 }
