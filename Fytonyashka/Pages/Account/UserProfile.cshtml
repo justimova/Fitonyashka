@@ -6,39 +6,36 @@
 
 <div class="container">
     <h2>Your Profile</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="UserProfileInput.Id" />
-        <input type="hidden" asp-for="UserProfileInput.AvatarFileName" />
+    <div class="form-group mb-3">
+        <label class="form-label">Profile Picture</label>
+        <div class="d-flex align-items-start">
+            <div class="position-relative">
+                <img src="@("/UserImages/" + Model.UserProfileInput.AvatarFileName)"
+                     class="user-avatar"
+                     alt="Profile Picture" onerror="this.src='@Url.Content("~/img/default-avatar.png")'" />
+            </div>
+            <div class="ms-3 d-flex flex-column">
+                <form method="post" enctype="multipart/form-data" asp-page-handler="Avatar">
+                    <input type="hidden" asp-for="UserProfileInput.Id" />
 
-        <div class="form-group mb-3">
-            <label class="form-label">Profile Picture</label>
-            @if (!string.IsNullOrEmpty(Model.UserProfileInput.AvatarFileName))
-                {
-                <div class="d-flex align-items-start">
-                    <div class="position-relative">
-                        <img src="@("/UserImages/" + Model.UserProfileInput.AvatarFileName)" 
-                             class="user-avatar" 
-                             alt="Profile Picture" />
-                    </div>
-                    <div class="ms-3 d-flex flex-column">
-                        <button type="button" class="btn btn-outline-primary mb-2" onclick="document.getElementById('avatarUpload').click()">
-                            <i class="bi bi-pencil"></i> Change
-                        </button>
-                        <button type="submit" asp-page-handler="DeleteAvatar" class="btn btn-outline-danger">
-                            <i class="bi bi-trash"></i> Delete
-                        </button>
-                        <input type="file" id="avatarUpload" name="AvatarFile" class="d-none" accept="image/*" onchange="this.form.submit()" />
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="mt-2">
-                    <input type="file" asp-for="AvatarFile" class="form-control" accept="image/*" />
-                    <span asp-validation-for="AvatarFile" class="text-danger"></span>
-                </div>
-            }
+                    <button type="button" class="btn btn-outline-primary mb-2" onclick="document.getElementById('avatarUpload').click()">
+                        <i class="bi bi-pencil"></i> Change
+                    </button>
+                    <input type="file" id="avatarUpload" name="AvatarFile" class="d-none" accept="image/*" onchange="this.form.submit()" />
+                </form>
+                <form method="post" asp-page-handler="DeleteAvatar">
+                    <input type="hidden" asp-for="UserProfileInput.Id" />
+                    <input type="hidden" asp-for="UserProfileInput.AvatarFileName" />
+                    <button type="submit" asp-page-handler="DeleteAvatar" class="btn btn-outline-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
         </div>
+    </div>
+
+    <form method="post">
+        <input type="hidden" asp-for="UserProfileInput.Id" />
 
         <div class="form-group">
             <label asp-for="UserProfileInput.Username">Username</label>

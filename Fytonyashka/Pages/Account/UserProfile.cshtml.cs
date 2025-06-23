@@ -47,6 +47,20 @@ namespace Fytonyashka.Pages.Account
                 return Page();
             }
 
+            _userService.Update(new UserDto {
+                Id = UserProfileInput.Id,
+                UserName = UserProfileInput.Username,
+                Email = UserProfileInput.Email,
+                FirstName = UserProfileInput.FirstName,
+                Birthday = UserProfileInput.Birthday,
+                Height = UserProfileInput.Height,
+            });
+
+            return RedirectToPage("/Account/UserProfile");
+        }
+
+        public async Task<IActionResult> OnPostAvatarAsync(IFormFile AvatarFile)
+        {
             string fileName = UserProfileInput.AvatarFileName;
             if (AvatarFile != null) {
                 string avatarPath = await _fileService.UploadFileAsync("UserImages", UserProfileInput.Id, AvatarFile);
@@ -58,28 +72,23 @@ namespace Fytonyashka.Pages.Account
                 fileName = Path.GetFileName(avatarPath);
             }
 
-            _userService.Update(new UserDto {
-                Id = UserProfileInput.Id,
-                UserName = UserProfileInput.Username,
-                Email = UserProfileInput.Email,
-                FirstName = UserProfileInput.FirstName,
-                Birthday = UserProfileInput.Birthday,
-                Height = UserProfileInput.Height,
-                AvatarFileName = fileName
-            });
-
+            _userService.UpdateAvatar(UserProfileInput.Id, fileName);
+            
             if (!string.IsNullOrEmpty(fileName)) {
                 HttpContext.Session.SetString("AvatarFileName", fileName);
-            } else {
+            }
+            else {
                 HttpContext.Session?.Remove("AvatarFileName");
             }
-            return RedirectToPage("/Account/UserProfile");
+
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostDeleteAvatarAsync() {
             await _fileService.DeleteFileAsync("UserImages", UserProfileInput.AvatarFileName);
             _userService.RemoveAvatar(UserProfileInput.Id);
             _staticFilePublisher.Delete(UserProfileInput.AvatarFileName, "UserImages");
+            HttpContext.Session?.Remove("AvatarFileName");
             return RedirectToPage("/Account/UserProfile");
         }
     }
