@@ -6,27 +6,31 @@
 
 <div class="container">
     <h2>Your Profile</h2>
-    <div class="form-group mb-3">
-        <label class="form-label">Profile Picture</label>
+
+    <!-- Avatar Block -->
+    <div class="card mb-4 shadow-sm border rounded p-3">
+        <h5 class="card-title">Profile Picture</h5>
         <div class="d-flex align-items-start">
             <div class="position-relative">
                 <img src="@("/UserImages/" + Model.UserProfileInput.AvatarFileName)"
                      class="user-avatar"
-                     alt="Profile Picture" onerror="this.src='@Url.Content("~/img/default-avatar.png")'" />
+                     alt="Profile Picture"
+                     onerror="this.src='@Url.Content("~/img/default-avatar.png")'" />
             </div>
             <div class="ms-3 d-flex flex-column">
                 <form method="post" enctype="multipart/form-data" asp-page-handler="Avatar">
                     <input type="hidden" asp-for="UserProfileInput.Id" />
-
-                    <button type="button" class="btn btn-outline-primary mb-2" onclick="document.getElementById('avatarUpload').click()">
+                    <button type="button" class="btn btn-outline-primary mb-2"
+                            onclick="document.getElementById('avatarUpload').click()">
                         <i class="bi bi-pencil"></i> Change
                     </button>
-                    <input type="file" id="avatarUpload" name="AvatarFile" class="d-none" accept="image/*" onchange="this.form.submit()" />
+                    <input type="file" id="avatarUpload" name="AvatarFile"
+                           class="d-none" accept="image/*" onchange="this.form.submit()" />
                 </form>
                 <form method="post" asp-page-handler="DeleteAvatar">
                     <input type="hidden" asp-for="UserProfileInput.Id" />
                     <input type="hidden" asp-for="UserProfileInput.AvatarFileName" />
-                    <button type="submit" asp-page-handler="DeleteAvatar" class="btn btn-outline-danger">
+                    <button type="submit" class="btn btn-outline-danger">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </form>
@@ -34,35 +38,40 @@
         </div>
     </div>
 
-    <form method="post">
-        <input type="hidden" asp-for="UserProfileInput.Id" />
+    <!-- Profile Form Block -->
+    <div class="card shadow-sm border rounded p-4">
+        <h5 class="card-title">Profile Information</h5>
+        <form method="post" asp-page-handler="ChangeUserProfile">
+            <input type="hidden" asp-for="UserProfileInput.Id" />
 
-        <div class="form-group">
-            <label asp-for="UserProfileInput.Username">Username</label>
-            <input asp-for="UserProfileInput.Username" class="form-control" readonly />
-        </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserProfileInput.Username">Username</label>
+                <input asp-for="UserProfileInput.Username" class="form-control" readonly />
+            </div>
 
-        <div class="form-group">
-            <label asp-for="UserProfileInput.Email">Email</label>
-            <input asp-for="UserProfileInput.Email" class="form-control" type="email" />
-            <span asp-validation-for="UserProfileInput.Email" class="text-danger"></span>
-        </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserProfileInput.Email">Email</label>
+                <input asp-for="UserProfileInput.Email" class="form-control" type="email" />
+                <span asp-validation-for="UserProfileInput.Email" class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="UserProfileInput.FirstName">First name</label>
-            <input asp-for="UserProfileInput.FirstName" class="form-control" type="text" />
-        </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserProfileInput.FirstName">First name</label>
+                <input asp-for="UserProfileInput.FirstName" class="form-control" type="text" />
+            </div>
 
-        <div class="form-group">
-            <label asp-for="UserProfileInput.Birthday">Birthday</label>
-            <input asp-for="UserProfileInput.Birthday" class="form-control" type="date" />
-        </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserProfileInput.Birthday">Birthday</label>
+                <input asp-for="UserProfileInput.Birthday" class="form-control" type="date" />
+            </div>
 
-        <div class="form-group">
-            <label asp-for="UserProfileInput.Height">Height (cm)</label>
-            <input asp-for="UserProfileInput.Height" class="form-control" type="number" />
-        </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserProfileInput.Height">Height (cm)</label>
+                <input asp-for="UserProfileInput.Height" class="form-control" type="number" />
+            </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Save</button>
-    </form>
+            <button type="submit" class="btn btn-primary mt-2">Save</button>
+        </form>
+    </div>
 </div>
+

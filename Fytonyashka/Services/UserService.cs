@@ -15,6 +15,8 @@ namespace Fytonyashka.Services
         UserDto GetByUsername(string username);
         void RemoveAvatar(int id);
         void UpdateAvatar(int id, string avatarFileName);
+        bool CheckPassword(int id, string password);
+        void ChangePassword(int id, string newPassword);
     }
 
     internal class UserService : IUserService
@@ -146,6 +148,19 @@ namespace Fytonyashka.Services
             UserDto user = GetById(id);
             if (user != null) {
                 user.AvatarFileName = avatarFileName;
+                Update(user);
+            }
+        }
+
+        public bool CheckPassword(int id, string password) {
+            UserDto user = GetById(id);
+            return user != null && user.Password == password;
+        }
+
+        public void ChangePassword(int id, string newPassword) {
+            UserDto user = GetById(id);
+            if (user != null) {
+                user.Password = newPassword;
                 Update(user);
             }
         }

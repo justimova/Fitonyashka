@@ -1,0 +1,29 @@
+﻿@page
+@model Fytonyashka.Pages.Account.SettingsModel
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="container">
+    <h2>Settings</h2>
+    <div class="card shadow-sm border rounded p-4">
+        <h5 class="card-title">Change password</h5>
+        <form method="post">
+            <input type="hidden" asp-for="ChangePasswordInput.Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="ChangePasswordInput.Password">Current password</label>
+                <input asp-for="ChangePasswordInput.Password" class="form-control" type="password" />
+                <span asp-validation-for="ChangePasswordInput.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ChangePasswordInput.NewPassword">New password</label>
+                <input asp-for="ChangePasswordInput.NewPassword" class="form-control" type="password" />
+                <span asp-validation-for="ChangePasswordInput.NewPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Change</button>
+        </form>
+    </div>
+</div>
