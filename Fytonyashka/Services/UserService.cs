@@ -103,6 +103,7 @@ namespace Fytonyashka.Services
             }
             user.Email = userDto.Email;
             user.Birthday = userDto.Birthday;
+            user.Gender = userDto.Gender;
             user.Height = userDto.Height;
             user.FirstName = userDto.FirstName;
             SaveToFile();

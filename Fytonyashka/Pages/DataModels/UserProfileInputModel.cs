@@ -8,6 +8,8 @@ public class UserProfileInputModel
 
     public DateTime Birthday { get; set; } = DateTime.UtcNow;
 
+    public int Gender { get; set; } = 0;
+
     public string FirstName { get; set; } = "";
 
     public int Height { get; set; } = 0;

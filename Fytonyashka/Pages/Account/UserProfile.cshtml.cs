@@ -35,6 +35,7 @@ namespace Fytonyashka.Pages.Account
                 Username = userDto.UserName,
                 Email = userDto.Email,
                 Birthday = userDto.Birthday,
+                Gender = userDto.Gender,
                 FirstName = userDto.FirstName,
                 Height = userDto.Height,
                 AvatarFileName = userDto.AvatarFileName
@@ -53,6 +54,7 @@ namespace Fytonyashka.Pages.Account
                 Email = UserProfileInput.Email,
                 FirstName = UserProfileInput.FirstName,
                 Birthday = UserProfileInput.Birthday,
+                Gender = UserProfileInput.Gender,
                 Height = UserProfileInput.Height,
             });
 
