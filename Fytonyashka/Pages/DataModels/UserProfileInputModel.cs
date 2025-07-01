@@ -14,6 +14,8 @@ public class UserProfileInputModel
 
     public int Height { get; set; } = 0;
 
+    public int? Weight { get; set; } = 0;
+
     [Required]
     [StringLength(50, MinimumLength = 3)]
     public string Username { get; set; }

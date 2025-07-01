@@ -11,17 +11,20 @@ namespace Fytonyashka.Pages.Account
         private readonly IUserService _userService;
         private readonly IFileService _fileService;
         private readonly IStaticFilePublisher _staticFilePublisher;
-        
+        private readonly IWeightService _weightService;
+
         [BindProperty]
         public IFormFile? AvatarFile { get; set; }
 
         [BindProperty]
         public UserProfileInputModel UserProfileInput { get; set; } = new UserProfileInputModel();
 
-        public UserProfileModel(IUserService userService, IFileService fileService, IStaticFilePublisher staticFilePublisher) {
+        public UserProfileModel(IUserService userService, IFileService fileService,
+                IStaticFilePublisher staticFilePublisher, IWeightService weightService) {
             _userService = userService;
             _fileService = fileService;
             _staticFilePublisher = staticFilePublisher;
+            _weightService = weightService;
         }
         
         public IActionResult OnGet() { 
@@ -38,8 +41,10 @@ namespace Fytonyashka.Pages.Account
                 Gender = userDto.Gender,
                 FirstName = userDto.FirstName,
                 Height = userDto.Height,
+                Weight = _weightService.GetLastByUserId(userDto.Id),
                 AvatarFileName = userDto.AvatarFileName
             };
+
             return Page();
         }
 

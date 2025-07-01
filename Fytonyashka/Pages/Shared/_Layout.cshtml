@@ -28,6 +28,12 @@
                         <li class="nav-item @(ViewContext.RouteData.Values["Page"]?.ToString() == "/User/Users" ? "active" : "")">
                             <a class="nav-link text-dark" asp-area="" asp-page="/User/Users">Admin panel</a>
                         </li>
+                        @if (Context.Session.GetString("Username") != null)
+                        {
+                            <li class="nav-item @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Weight/Weights" ? "active" : "")">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Weight/Weights">Your weight</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (Context.Session.GetString("Username") != null)

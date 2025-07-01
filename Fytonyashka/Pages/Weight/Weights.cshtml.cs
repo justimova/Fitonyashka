@@ -17,8 +17,8 @@ namespace Fytonyashka.Pages
         }
 
         public void OnGet() {
-           Weights = _weightService.GetAll()
-            .Where(w => w.UserId == HttpContext.Session.GetInt32("UserId"))
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            Weights = _weightService.GetAllByUserId(userId)
             .Select(w => new WeightInputModel {
                Id = w.Id,
                Date = w.Date,
