@@ -3,6 +3,7 @@ namespace Fytonyashka.Services;
 public interface IFileService
 {
     Task<string> UploadFileAsync(string dirName, int id, IFormFile? file);
+    Task DeleteFileAsync(string dirName, string fileName);
 }
 
 internal class FileService : IFileService
@@ -25,5 +26,13 @@ internal class FileService : IFileService
             }
         }
         return filePath;
+    }
+
+    public async Task DeleteFileAsync(string dirName, string fileName) {
+        string baseDirectory = Directory.GetCurrentDirectory();
+        var filePath = Path.Combine(baseDirectory, "Data", dirName, fileName);
+        if (File.Exists(filePath)) {
+            File.Delete(filePath);
+        }
     }
 }

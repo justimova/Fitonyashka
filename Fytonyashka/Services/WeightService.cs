@@ -10,6 +10,8 @@ public interface IWeightService
     bool Delete(int id);
     bool Update(WeightDto weightDto);
     WeightDto GetById(int id);
+    int? GetLastByUserId(int userId);
+    List<WeightDto> GetAllByUserId(int userId);
 }
 
 internal class WeightService : IWeightService
@@ -53,8 +55,14 @@ internal class WeightService : IWeightService
 
     public bool Create(WeightDto weightDto) {
         try {
-            weightDto.Id = _nextId++;
-            _weights.Add(weightDto);
+            var weight = GetAllByUserId(weightDto.UserId)
+                .FirstOrDefault(w => w.Date == weightDto.Date);
+            if (weight != null) {
+                weight.Weight = weightDto.Weight;
+            } else {
+                weightDto.Id = _nextId++;
+                _weights.Add(weightDto);
+            }
             SaveToFile();
             return true;
         } catch (Exception) {
@@ -62,7 +70,7 @@ internal class WeightService : IWeightService
         }
     }
 
-    public List<WeightDto> GetAll() => _weights;
+    public List<WeightDto> GetAll() => _weights.OrderByDescending(w => w.Date).ToList();
 
     public bool Delete(int id){
         foreach (WeightDto weight in _weights) {
@@ -80,8 +88,8 @@ internal class WeightService : IWeightService
         if (weight == null) {
             return false;
         }
+
         weight.Weight = weightDto.Weight;
-        weight.Date = weightDto.Date;
         SaveToFile();
         return true;
     }
@@ -94,4 +102,8 @@ internal class WeightService : IWeightService
         }
         return null;
     }
+
+    public int? GetLastByUserId(int userId) => (int?)(GetAllByUserId(userId).FirstOrDefault()?.Weight);
+
+    public List<WeightDto> GetAllByUserId(int userId) => GetAll().Where(w => w.UserId == userId).ToList();
 }

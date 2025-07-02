@@ -8,9 +8,13 @@ public class UserProfileInputModel
 
     public DateTime Birthday { get; set; } = DateTime.UtcNow;
 
+    public int Gender { get; set; } = 0;
+
     public string FirstName { get; set; } = "";
 
     public int Height { get; set; } = 0;
+
+    public int? Weight { get; set; } = 0;
 
     [Required]
     [StringLength(50, MinimumLength = 3)]
@@ -20,5 +24,5 @@ public class UserProfileInputModel
     [EmailAddress]
     public string Email { get; set; }
 
-    public string AvatarPath { get; set; }
+    public string? AvatarFileName { get; set; }
 }

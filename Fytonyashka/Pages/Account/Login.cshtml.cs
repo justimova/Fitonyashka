@@ -25,7 +25,7 @@ namespace Fytonyashka.Pages.Account
             {
                 var userDto = _userService.GetByUsername(LoginInput.UserName);
                 HttpContext.Session.SetString("Username", LoginInput.UserName);
-                HttpContext.Session.SetString("AvatarPath", userDto?.AvatarPath ?? "");
+                HttpContext.Session.SetString("AvatarFileName", userDto?.AvatarFileName ?? "");
                 HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
                 return RedirectToPage("/Index");
             }

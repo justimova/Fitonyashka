@@ -6,20 +6,58 @@
 
 <div class="container">
     <h2>Enter your weight</h2>
-    <form method="post">
+    <form method="post" id="weightForm">
         <input type="hidden" asp-for="WeightInput.UserId" />
+        <input type="hidden" name="OverwriteConfirmed" value="false" id="overwriteFlag" />
         <div class="form-group">
             <label asp-for="WeightInput.Weight">Weight</label>
-            <input asp-for="WeightInput.Weight" class="form-control" type="number" step="0.1"/>
+            <input asp-for="WeightInput.Weight" class="form-control" type="number" step="0.1" />
             <span asp-validation-for="WeightInput.Weight" class="text-danger"></span>
         </div>
-        
+
         <div class="form-group">
             <label asp-for="WeightInput.Date">Date</label>
             <input asp-for="WeightInput.Date" class="form-control" type="date" />
             <span asp-validation-for="WeightInput.Date" class="text-danger"></span>
         </div>
-        
+
         <button type="submit" class="btn btn-primary mt-3">Save</button>
     </form>
 </div>
+
+<!-- Confirmation Dialog (Bootstrap Modal) -->
+@if (TempData["ShowConfirmation"] != null)
+{
+    <div class="modal" tabindex="-1" role="dialog" style="display:block;" id="confirmModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Overwrite</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Weight for this date already exists. Do you want to overwrite it?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="confirmOverwrite()">Yes</button>
+                    <a href="javascript:history.back()" class="btn btn-secondary">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function confirmOverwrite() {
+            document.getElementById("overwriteFlag").value = "true";
+            document.getElementById("weightForm").submit();
+        }
+
+        window.onload = function () {
+            const modal = document.getElementById("confirmModal");
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+    </script>
+}

@@ -17,6 +17,9 @@ namespace Fytonyashka.Pages.Weight
         [BindProperty]
         public WeightInputModel WeightInput { get; set; }
 
+        [BindProperty]
+        public bool OverwriteConfirmed { get; set; }
+
         public IActionResult OnGet(int userId) { 
             WeightInput = new WeightInputModel();
             WeightInput.UserId = userId;
@@ -25,6 +28,15 @@ namespace Fytonyashka.Pages.Weight
 
         public IActionResult OnPost() {
             if (!ModelState.IsValid) {
+                return Page();
+            }
+
+            var isExists = _weightService
+                .GetAllByUserId(WeightInput.UserId)
+                .Any(w => w.Date == WeightInput.Date);
+
+            if (isExists && !OverwriteConfirmed) {
+                TempData["ShowConfirmation"] = true;
                 return Page();
             }
 

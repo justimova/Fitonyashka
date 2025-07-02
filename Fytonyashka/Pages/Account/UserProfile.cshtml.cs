@@ -11,17 +11,20 @@ namespace Fytonyashka.Pages.Account
         private readonly IUserService _userService;
         private readonly IFileService _fileService;
         private readonly IStaticFilePublisher _staticFilePublisher;
-        
+        private readonly IWeightService _weightService;
+
         [BindProperty]
         public IFormFile? AvatarFile { get; set; }
 
         [BindProperty]
         public UserProfileInputModel UserProfileInput { get; set; } = new UserProfileInputModel();
 
-        public UserProfileModel(IUserService userService, IFileService fileService, IStaticFilePublisher staticFilePublisher) {
+        public UserProfileModel(IUserService userService, IFileService fileService,
+                IStaticFilePublisher staticFilePublisher, IWeightService weightService) {
             _userService = userService;
             _fileService = fileService;
             _staticFilePublisher = staticFilePublisher;
+            _weightService = weightService;
         }
         
         public IActionResult OnGet() { 
@@ -35,20 +38,20 @@ namespace Fytonyashka.Pages.Account
                 Username = userDto.UserName,
                 Email = userDto.Email,
                 Birthday = userDto.Birthday,
+                Gender = userDto.Gender,
                 FirstName = userDto.FirstName,
                 Height = userDto.Height,
-                AvatarPath = userDto.AvatarPath
+                Weight = _weightService.GetLastByUserId(userDto.Id),
+                AvatarFileName = userDto.AvatarFileName
             };
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
+        public async Task<IActionResult> OnPostAsync() {
             if (!ModelState.IsValid) {
                 return Page();
             }
-
-            string avatarPath = await _fileService.UploadFileAsync("UserImages", UserProfileInput.Id, AvatarFile);
 
             _userService.Update(new UserDto {
                 Id = UserProfileInput.Id,
@@ -56,11 +59,43 @@ namespace Fytonyashka.Pages.Account
                 Email = UserProfileInput.Email,
                 FirstName = UserProfileInput.FirstName,
                 Birthday = UserProfileInput.Birthday,
+                Gender = UserProfileInput.Gender,
                 Height = UserProfileInput.Height,
-                AvatarPath = avatarPath
             });
 
-            _staticFilePublisher.Publish(avatarPath, "UserImages");
+            return RedirectToPage("/Account/UserProfile");
+        }
+
+        public async Task<IActionResult> OnPostAvatarAsync(IFormFile AvatarFile)
+        {
+            string fileName = UserProfileInput.AvatarFileName;
+            if (AvatarFile != null) {
+                string avatarPath = await _fileService.UploadFileAsync("UserImages", UserProfileInput.Id, AvatarFile);
+                _staticFilePublisher.Publish(avatarPath, "UserImages");
+                if (!string.IsNullOrEmpty(fileName)) {
+                    await _fileService.DeleteFileAsync("UserImages", fileName);
+                    _staticFilePublisher.Delete(fileName, "UserImages");
+                }
+                fileName = Path.GetFileName(avatarPath);
+            }
+
+            _userService.UpdateAvatar(UserProfileInput.Id, fileName);
+            
+            if (!string.IsNullOrEmpty(fileName)) {
+                HttpContext.Session.SetString("AvatarFileName", fileName);
+            }
+            else {
+                HttpContext.Session?.Remove("AvatarFileName");
+            }
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostDeleteAvatarAsync() {
+            await _fileService.DeleteFileAsync("UserImages", UserProfileInput.AvatarFileName);
+            _userService.RemoveAvatar(UserProfileInput.Id);
+            _staticFilePublisher.Delete(UserProfileInput.AvatarFileName, "UserImages");
+            HttpContext.Session?.Remove("AvatarFileName");
             return RedirectToPage("/Account/UserProfile");
         }
     }
