@@ -88,8 +88,8 @@ internal class WeightService : IWeightService
         if (weight == null) {
             return false;
         }
+
         weight.Weight = weightDto.Weight;
-        weight.Date = weightDto.Date;
         SaveToFile();
         return true;
     }
