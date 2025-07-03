@@ -24,3 +24,12 @@ body {
     border-radius: 50%;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
+.rotate-icon svg {
+    transition: transform 0.3s ease;
+}
+
+button[aria-expanded="true"] .rotate-icon svg {
+    transform: rotate(180deg);
+}
+    
