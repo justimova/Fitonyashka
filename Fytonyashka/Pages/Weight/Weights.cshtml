@@ -2,10 +2,23 @@
 @model WeightModel
 @{
     ViewData["Title"] = "Weight";
+
+    var latestWeightEntry = Model.WeeklyWeights
+        .SelectMany(w => w.Entries)
+        .OrderByDescending(e => e.Date)
+        .FirstOrDefault();
 }
 
-<div class="text-center mb-4">
-    <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Create/@HttpContext.Session.GetInt32("UserId")';">Enter weight</button>
+<div class="text-center my-4">
+    @if (latestWeightEntry != null)
+    {
+        <div class="d-flex flex-column align-items-center">
+            <div style="width: 160px; height: 160px;">
+                @Html.Raw(System.IO.File.ReadAllText(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "weight_icon.svg"))
+               .Replace("{{weight}}", latestWeightEntry.Weight.ToString("0.0") + " kg"))
+            </div>
+        </div>
+    }
 </div>
 
 <div class="container">
@@ -38,7 +51,7 @@
                                 @weight.Date.ToString("dd.MM")
                             </div>
                             <div class="fw-bold" style="font-size: 1rem; min-width: 60px;">
-                                @weight.Weight.ToString("0.0") кг
+                                @weight.Weight.ToString("0.0") kg
                             </div>
                         </div>
                         <div class="d-flex gap-2">
