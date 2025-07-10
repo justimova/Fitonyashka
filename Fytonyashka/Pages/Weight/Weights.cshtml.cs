@@ -12,20 +12,23 @@ namespace Fytonyashka.Pages
         [BindProperty]
         public List<WeeklyWeightGroup> WeeklyWeights { get; set; }
 
+        [BindProperty]
+        public List<WeightInputModel> Weights { get; set; } 
+
         public WeightModel(IWeightService weightService) {
             _weightService = weightService;
         }
 
         public void OnGet() {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            List<WeightInputModel> weights = _weightService.GetAllByUserId(userId)
+            Weights = _weightService.GetAllByUserId(userId)
                 .Select(w => new WeightInputModel {
                     Id = w.Id,
                     Date = w.Date,
                     Weight = w.Weight
                 }).ToList();
 
-            WeeklyWeights = weights
+            WeeklyWeights = Weights
                 .GroupBy(w => {
                     var monday = w.Date.Date.AddDays(-(int)w.Date.DayOfWeek + (w.Date.DayOfWeek == DayOfWeek.Sunday ? -6 : 1));
                     var sunday = monday.AddDays(6);
@@ -37,6 +40,8 @@ namespace Fytonyashka.Pages
                     Entries = g.OrderByDescending(e => e.Date).ToList()
                 })
                 .ToList();
+
+            Weights = Weights.OrderBy(w => w.Date).ToList();
         }
 
         public IActionResult OnPostDelete(int id) {

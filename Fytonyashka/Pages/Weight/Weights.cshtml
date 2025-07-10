@@ -21,6 +21,12 @@
     }
 </div>
 
+<canvas id="weightChart" width="400" height="200"></canvas>
+
+<div class="text-center my-4">
+    <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Create/@HttpContext.Session.GetInt32("UserId")';">Enter weight</button>
+</div>
+
 <div class="container">
     @foreach (var week in Model.WeeklyWeights.Select((group, index) => new { group, index }))
     {
@@ -67,4 +73,48 @@
     }
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
+    const labels = @Html.Raw(Json.Serialize(Model.Weights.Select(d => d.Date.ToString("yyyy-MM-dd"))));
+    const dataPoints = @Html.Raw(Json.Serialize(Model.Weights.Select(d => d.Weight)));
+
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    const weightChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Weight (kg)',
+                data: dataPoints,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.3,
+                pointRadius: 4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Date' },
+                    ticks: { autoSkip: true, maxTicksLimit: 10 }
+                },
+                y: {
+                    title: { display: true, text: 'Weight (kg)' },
+                    beginAtZero: false
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.parsed.y} kg`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
