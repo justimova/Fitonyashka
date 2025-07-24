@@ -21,6 +21,16 @@
     }
 </div>
 
+<div class="mb-3">
+    <form method="post" asp-page-handler="ChangePeriod">
+        <div class="form-group">
+            <label for="periodSelect" class="form-label">Select time period:</label>
+            <select class="form-select" id="periodSelect" name="period" asp-items="Model.Periods">
+            </select>
+        </div>
+    </form>
+</div>
+
 <canvas id="weightChart" width="400" height="200"></canvas>
 
 <div class="text-center my-4">
@@ -76,8 +86,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const labels = @Html.Raw(Json.Serialize(Model.Weights.Select(d => d.Date.ToString("yyyy-MM-dd"))));
-    const dataPoints = @Html.Raw(Json.Serialize(Model.Weights.Select(d => d.Weight)));
+    const labels = @Html.Raw(Json.Serialize(Model.GraphWeights.Select(d => d.Date.ToString("yyyy-MM-dd"))));
+    const dataPoints = @Html.Raw(Json.Serialize(Model.GraphWeights.Select(d => d.Weight)));
 
     const ctx = document.getElementById('weightChart').getContext('2d');
     const weightChart = new Chart(ctx, {
@@ -116,5 +126,12 @@
                 }
             }
         }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const select = document.getElementById("periodSelect");
+        select.addEventListener("change", function () {
+            this.form.submit();
+        });
     });
 </script>
