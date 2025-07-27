@@ -31,6 +31,15 @@
     </form>
 </div>
 
+<div class="text-center mb-3">
+    <div class="fw-bold fs-5">
+        Avarage weight: @Model.GraphWeights.Average(w => w.Weight).ToString("F2") kg
+    </div>
+    <div>
+        @Model.GraphWeights.First().Date.ToString("dd MMM yyyy") – @Model.GraphWeights.Last().Date.ToString("dd MMM yyyy")
+    </div>
+</div>
+
 <canvas id="weightChart" width="400" height="200"></canvas>
 
 <div class="text-center my-4">
