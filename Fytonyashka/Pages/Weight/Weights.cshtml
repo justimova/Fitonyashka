@@ -21,26 +21,46 @@
     }
 </div>
 
-<div class="mb-3">
-    <form method="post" asp-page-handler="ChangePeriod">
-        <div class="form-group">
-            <label for="periodSelect" class="form-label">Select time period:</label>
-            <select class="form-select" id="periodSelect" name="period" asp-items="Model.Periods">
-            </select>
+<div class="mb-4">
+    <button class="btn select-like-button w-100 d-flex justify-content-between align-items-center mb-2"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#GraphCollapse"
+            aria-expanded="true"
+            aria-controls="GraphCollapse">
+        <span>Graph</span>
+        <span class="rotate-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="black" class="bi bi-chevron-down transition" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </span>
+    </button>
+
+    <div class="collapse show" id="GraphCollapse">
+
+
+        <div class="mb-3">
+            <form method="post" asp-page-handler="ChangePeriod">
+                <div class="form-group">
+                    <label for="periodSelect" class="form-label">Select time period:</label>
+                    <select class="form-select" id="periodSelect" name="period" asp-items="Model.Periods">
+                    </select>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
 
-<div class="text-center mb-3">
-    <div class="fw-bold fs-5">
-        Avarage weight: @Model.GraphWeights.Average(w => w.Weight).ToString("F2") kg
-    </div>
-    <div>
-        @Model.GraphWeights.First().Date.ToString("dd MMM yyyy") – @Model.GraphWeights.Last().Date.ToString("dd MMM yyyy")
+        <div class="text-center mb-3">
+            <div class="fw-bold fs-5">
+                Avarage weight: @Model.GraphWeights.Average(w => w.Weight).ToString("F2") kg
+            </div>
+            <div>
+                @Model.GraphWeights.First().Date.ToString("dd MMM yyyy") – @Model.GraphWeights.Last().Date.ToString("dd MMM yyyy")
+            </div>
+        </div>
+
+        <canvas id="weightChart" width="400" height="200"></canvas>
     </div>
 </div>
-
-<canvas id="weightChart" width="400" height="200"></canvas>
 
 <div class="text-center my-4">
     <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Create/@HttpContext.Session.GetInt32("UserId")';">Enter weight</button>
