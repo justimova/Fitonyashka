@@ -2,24 +2,7 @@
 @model WeightModel
 @{
     ViewData["Title"] = "Weight";
-
-    var latestWeightEntry = Model.WeeklyWeights
-        .SelectMany(w => w.Entries)
-        .OrderByDescending(e => e.Date)
-        .FirstOrDefault();
 }
-
-<div class="text-center my-4">
-    @if (latestWeightEntry != null)
-    {
-        <div class="d-flex flex-column align-items-center">
-            <div style="width: 160px; height: 160px;">
-                @Html.Raw(System.IO.File.ReadAllText(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "weight_icon.svg"))
-               .Replace("{{weight}}", latestWeightEntry.Weight.ToString("0.0") + " kg"))
-            </div>
-        </div>
-    }
-</div>
 
 <div class="mb-4">
     <button class="btn select-like-button w-100 d-flex justify-content-between align-items-center mb-2"
@@ -67,8 +50,7 @@
 </div>
 
 <div class="container">
-    @foreach (var week in Model.WeeklyWeights.Select((group, index) => new { group, index }))
-    {
+    @foreach (var week in Model.WeeklyWeights.Select((group, index) => new { group, index })) {
         var collapseId = $"collapseWeek{week.index}";
 
         <div class="mb-4">
@@ -87,8 +69,7 @@
             </button>
 
             <div class="collapse show" id="@collapseId">
-                @foreach (var weight in week.group.Entries)
-                {
+                @foreach (var weight in week.group.Entries) {
                     <div class="border rounded p-3 mb-2 d-flex justify-content-between align-items-center">
                         <div class="d-flex" style="min-width: 200px;">
                             <div style="width: 100px;" class="text-muted">

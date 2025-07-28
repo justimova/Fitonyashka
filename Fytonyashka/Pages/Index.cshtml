@@ -4,20 +4,25 @@
     ViewData["Title"] = "Home page";
 }
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    @if (HttpContext.Session.GetString("Username") != null)
-    {        
+    @if (HttpContext.Session.GetString("Username") != null) {
+        <h1 class="display-4">Hi, @HttpContext.Session.GetString("Username")</h1>
         <div class="container">
             <div class="row mt-4">
                 <div class="col">
-                    <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Weights'">Your weight</button>
+                    @if (Model.LatestWeightEntry != null) {
+                        <div class="d-flex flex-column align-items-center" style="cursor: pointer;" onclick="location.href='/Weight/Weights'">
+                            <div style="width: 160px; height: 160px;">
+                                @Html.Raw(System.IO.File.ReadAllText(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "weight_icon.svg"))
+                                    .Replace("{{weight}}", Model.LatestWeightEntry.Weight.ToString("0.0") + " kg"))
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-    }
-    else
-    {        
+    } else {
         <div class="container">
+            <h1 class="display-4">Welcome</h1>
             <h2>Please sign in to track your weight</h2>
             <div class="row mt-4">
                 <div class="col">
