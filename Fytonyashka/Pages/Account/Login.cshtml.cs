@@ -30,7 +30,7 @@ namespace Fytonyashka.Pages.Account
                 return RedirectToPage("/Index");
             }
 
-            ModelState.AddModelError("", "Invalid login attempt");
+            ModelState.AddModelError("", "You entered wrong username or password");
             return Page();
         }
     }
