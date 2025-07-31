@@ -17,6 +17,7 @@ namespace Fytonyashka.Services
         void UpdateAvatar(int id, string avatarFileName);
         bool CheckPassword(int id, string password);
         void ChangePassword(int id, string newPassword);
+        void UpdateDateRange(int userId, int selectedPeriodId);
     }
 
     internal class UserService : IUserService
@@ -162,6 +163,14 @@ namespace Fytonyashka.Services
             UserDto user = GetById(id);
             if (user != null) {
                 user.Password = newPassword;
+                Update(user);
+            }
+        }
+
+        public void UpdateDateRange(int userId, int selectedPeriodId) {
+            UserDto user = GetById(userId);
+            if (user != null)  {
+                user.SelectedDateRangeId = selectedPeriodId;
                 Update(user);
             }
         }
