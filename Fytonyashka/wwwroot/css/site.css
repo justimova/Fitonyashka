@@ -72,4 +72,20 @@ button[aria-expanded="true"] .rotate-icon svg {
 .select-like-button .chevron.rotate {
     transform: rotate(180deg);
 }
+
+.nav-icon {
+    color: #555;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-icon:not(.disabled):hover,
+.nav-icon:not(.disabled):hover i {
+    color: #000 !important;
+}
+
+.nav-icon i {
+    pointer-events: none;
+}
     

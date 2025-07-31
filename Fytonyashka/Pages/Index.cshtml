@@ -2,18 +2,48 @@
 @model IndexModel
 @{    
     ViewData["Title"] = "Home page";
+
+    var currentIndex = Model.CurrentWeightEntry != null ?
+            Model.Weights.Select(w => w.Date).ToList().IndexOf(Model.CurrentWeightEntry.Date) : -1;
+    var hasPrev = currentIndex > 0;
+    var hasNext = currentIndex >= 0 && currentIndex < Model.Weights.Count - 1;
+    var prevDate = hasPrev ? Model.Weights[currentIndex - 1].Date.ToString() : null;
+    var nextDate = hasNext ? Model.Weights[currentIndex + 1].Date.ToString() : null;
 }
 <div class="text-center">
     @if (HttpContext.Session.GetString("Username") != null) {
         <h1 class="display-4">Hi, @HttpContext.Session.GetString("Username")</h1>
-        <div class="container">
+        <div class="container" style="max-width: 200px;">
+            <div id="dateCarousel" class="carousel slide mt-4" data-bs-ride="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active text-center">
+                        <div class="d-flex justify-content-between align-items-center">
+                            @if (hasPrev) {
+                                <a class="nav-icon" href="?date=@prevDate">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            } else {
+                                <span class="nav-icon disabled"><i class="bi bi-chevron-left"></i></span>
+                            }
+                            <span class="h5 mb-0 flex-grow-1">@Model.FormatDate(Model.CurrentWeightEntry.Date)</span>
+                            @if (hasNext) {
+                                <a class="nav-icon" href="?date=@nextDate">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            } else {
+                                <span class="nav-icon disabled"><i class="bi bi-chevron-right"></i></span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row mt-4">
                 <div class="col">
-                    @if (Model.LatestWeightEntry != null) {
+                    @if (Model.CurrentWeightEntry != null) {
                         <div class="d-flex flex-column align-items-center" style="cursor: pointer;" onclick="location.href='/Weight/Weights'">
                             <div style="width: 160px; height: 160px;">
                                 @Html.Raw(System.IO.File.ReadAllText(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "weight_icon.svg"))
-                                    .Replace("{{weight}}", Model.LatestWeightEntry.Weight.ToString("0.0") + " kg"))
+                                                   .Replace("{{weight}}", Model.CurrentWeightEntry.Weight.ToString("0.0") + " kg"))
                             </div>
                         </div>
                     }

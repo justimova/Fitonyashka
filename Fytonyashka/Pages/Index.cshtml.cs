@@ -12,10 +12,10 @@ namespace Fytonyashka.Pages
         private readonly IUserService _userService;
 
         [BindProperty]
-        public List<WeeklyWeightGroup> WeeklyWeights { get; set; }
+        public List<WeightInputModel> Weights { get; set; }
 
         [BindProperty]
-        public WeightInputModel LatestWeightEntry { get; set; }
+        public WeightInputModel CurrentWeightEntry { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger, IWeightService weightService, IUserService userService)
         {
@@ -24,36 +24,27 @@ namespace Fytonyashka.Pages
             _userService = userService;
         }
 
-        public void OnGet()
+        public void OnGet(DateTime? date)
         {
             if (HttpContext.Session.GetString("Username") != null) {
                 int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
                 var userDto = _userService.GetById(userId);
-                var weights = _weightService.GetAllByUserId(userId)
+                Weights = _weightService.GetAllByUserId(userId)
                     .Select(w => new WeightInputModel
                     {
                         Id = w.Id,
                         Date = w.Date,
                         Weight = w.Weight
-                    }).ToList();
-                WeeklyWeights = weights
-                    .GroupBy(w => {
-                        var monday = w.Date.Date.AddDays(-(int)w.Date.DayOfWeek + (w.Date.DayOfWeek == DayOfWeek.Sunday ? -6 : 1));
-                        var sunday = monday.AddDays(6);
-                        return new { Start = monday, End = sunday };
-                    })
-                    .OrderByDescending(g => g.Key.Start)
-                    .Select(g => new WeeklyWeightGroup
-                    {
-                        WeekTitle = $"{g.Key.Start:dd MMMM} – {g.Key.End:dd MMMM yyyy}",
-                        Entries = g.OrderByDescending(e => e.Date).ToList()
-                    })
+                    }).OrderBy(e => e.Date)
                     .ToList();
-                LatestWeightEntry = WeeklyWeights
-                    .SelectMany(w => w.Entries)
-                    .OrderByDescending(e => e.Date)
-                    .FirstOrDefault();
+                CurrentWeightEntry = date.HasValue ? Weights.LastOrDefault(w => w.Date == date.Value) : Weights.LastOrDefault();
             }
         }
+        public string FormatDate(DateTime date) => date.Date switch {
+            var d when d == DateTime.Today => "Today",
+            var d when d == DateTime.Today.AddDays(-1) => "Yesterday",
+            var d when d.Year == DateTime.Today.Year => d.ToString("ddd, MMM dd", System.Globalization.CultureInfo.InvariantCulture),
+            _ => date.ToString("ddd, MMM dd, yyyy", System.Globalization.CultureInfo.InvariantCulture)
+        };
     }
 }
