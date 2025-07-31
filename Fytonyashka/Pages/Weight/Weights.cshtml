@@ -4,32 +4,144 @@
     ViewData["Title"] = "Weight";
 }
 
-<div class="text-center mb-4">
+<div class="mb-4">
+    <button class="btn select-like-button w-100 d-flex justify-content-between align-items-center mb-2"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#GraphCollapse"
+            aria-expanded="true"
+            aria-controls="GraphCollapse">
+        <span>Graph</span>
+        <span class="rotate-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="black" class="bi bi-chevron-down transition" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </span>
+    </button>
+
+    <div class="collapse show" id="GraphCollapse">
+
+
+        <div class="mb-3">
+            <form method="post" asp-page-handler="ChangePeriod">
+                <div class="form-group">
+                    <label for="periodSelect" class="form-label">Select time period:</label>
+                    <select class="form-select" id="periodSelect" name="period" asp-items="Model.Periods">
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <div class="text-center mb-3">
+            <div class="fw-bold fs-5">
+                Avarage weight: @Model.GraphWeights.Average(w => w.Weight).ToString("F2") kg
+            </div>
+            <div>
+                @Model.GraphWeights.First().Date.ToString("dd MMM yyyy") – @Model.GraphWeights.Last().Date.ToString("dd MMM yyyy")
+            </div>
+        </div>
+
+        <canvas id="weightChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+<div class="text-center my-4">
     <button type="button" class="btn btn-primary" onclick="location.href='/Weight/Create/@HttpContext.Session.GetInt32("UserId")';">Enter weight</button>
 </div>
 
 <div class="container">
-    <div class="d-flex flex-wrap gap-3">
-        @foreach (var weight in Model.Weights)
-        {
-            <div class="user-card flex-grow-0" style="min-width: 300px; flex-basis: calc(33.333% - 1rem);">
-                <div class="border rounded p-3 h-100">
-                    <div class="d-flex flex-column h-100">
-                        <div class="mb-2">
-                            @weight.Date.ToShortDateString()
+    @foreach (var week in Model.WeeklyWeights.Select((group, index) => new { group, index })) {
+        var collapseId = $"collapseWeek{week.index}";
+
+        <div class="mb-4">
+            <button class="btn btn-info w-100 d-flex justify-content-between align-items-center mb-2"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#@collapseId"
+                    aria-expanded="true"
+                    aria-controls="@collapseId">
+                <span>@week.group.WeekTitle</span>
+                <span class="rotate-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-chevron-down transition" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </span>
+            </button>
+
+            <div class="collapse show" id="@collapseId">
+                @foreach (var weight in week.group.Entries) {
+                    <div class="border rounded p-3 mb-2 d-flex justify-content-between align-items-center">
+                        <div class="d-flex" style="min-width: 200px;">
+                            <div style="width: 100px;" class="text-muted">
+                                @weight.Date.ToString("ddd", System.Globalization.CultureInfo.InvariantCulture)
+                                @weight.Date.ToString("dd.MM")
+                            </div>
+                            <div class="fw-bold" style="font-size: 1rem; min-width: 60px;">
+                                @weight.Weight.ToString("0.0") kg
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <strong>@weight.Weight</strong> kg
-                        </div>
-                        <div class="d-flex gap-2 mt-auto">
-                            <button class="btn btn-warning flex-grow-1" onclick="location.href='/Weight/Update/@weight.Id'">Edit</button>
-                            <form method="post" asp-page-handler="Delete" asp-route-id="@weight.Id" class="flex-grow-1">
-                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-warning" onclick="location.href='/Weight/Update/@weight.Id'">Edit</button>
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@weight.Id">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
                             </form>
                         </div>
                     </div>
-                </div>
+                }
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = @Html.Raw(Json.Serialize(Model.GraphWeights.Select(d => d.Date.ToString("yyyy-MM-dd"))));
+    const dataPoints = @Html.Raw(Json.Serialize(Model.GraphWeights.Select(d => d.Weight)));
+
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    const weightChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Weight (kg)',
+                data: dataPoints,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.3,
+                pointRadius: 4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Date' },
+                    ticks: { autoSkip: true, maxTicksLimit: 10 }
+                },
+                y: {
+                    title: { display: true, text: 'Weight (kg)' },
+                    beginAtZero: false
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.parsed.y} kg`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const select = document.getElementById("periodSelect");
+        select.addEventListener("change", function () {
+            this.form.submit();
+        });
+    });
+</script>

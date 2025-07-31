@@ -12,4 +12,5 @@ public class UserDto
     public int Height { get; set; }
     public int Weight { get; set; }
     public string AvatarFileName { get; set; }
+    public int SelectedDateRangeId { get; set; } = 2;
 }

@@ -15,6 +15,7 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IWeightService, WeightService>();
 builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
+builder.Services.AddSingleton<IWeightDateRangeService, WeightDateRangeService>();
 
 var app = builder.Build();
 
