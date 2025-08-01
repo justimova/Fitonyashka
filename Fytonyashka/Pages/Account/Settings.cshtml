@@ -8,6 +8,16 @@
     <h2>Settings</h2>
     <div class="card shadow-sm border rounded p-4">
         <h5 class="card-title">Change password</h5>
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""].Errors.Count > 0)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @foreach (var error in ViewData.ModelState[""].Errors)
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <form method="post">
             <input type="hidden" asp-for="ChangePasswordInput.Id" />
 

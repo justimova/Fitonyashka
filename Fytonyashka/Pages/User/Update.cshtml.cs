@@ -19,7 +19,8 @@ namespace Fytonyashka.Pages.User
         public IActionResult OnGet(int id) { 
             var userDto = _userService.GetById(id);
             if (userDto == null) {
-                return NotFound(); // TODO: #2
+                ModelState.AddModelError("", "User doesn't exist. Try later or text our support");
+                return Page();
             }
             UserInput = new UserInputModel {
                 Id = userDto.Id,
