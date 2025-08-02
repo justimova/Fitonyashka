@@ -29,11 +29,25 @@
 
             <div class="form-group mb-3">
                 <label asp-for="ChangePasswordInput.NewPassword">New password</label>
-                <input asp-for="ChangePasswordInput.NewPassword" class="form-control" type="password" />
+                <input asp-for="ChangePasswordInput.NewPassword" class="form-control" type="password" id="passwordInput" />
                 <span asp-validation-for="ChangePasswordInput.NewPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mt-2">
+                <input type="checkbox" class="form-check-input" id="showPasswordCheckbox" onclick="togglePasswordVisibility()" />
+                <label class="form-check-label" for="showPasswordCheckbox">Show password</label>
             </div>
 
             <button type="submit" class="btn btn-primary mt-2">Change</button>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+}
