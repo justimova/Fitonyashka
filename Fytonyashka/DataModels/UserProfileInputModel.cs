@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Fytonyashka.Pages.DataModels;
+namespace Fytonyashka.DataModels;
 
 public class UserProfileInputModel
 {

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Fytonyashka.Pages.DataModels;
+namespace Fytonyashka.DataModels;
+
 public class WeightInputModel
 {
     public int Id { get; set; }
