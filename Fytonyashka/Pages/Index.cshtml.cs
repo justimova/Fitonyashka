@@ -1,4 +1,4 @@
-﻿using Fytonyashka.Pages.DataModels;
+﻿using Fytonyashka.DataModels;
 using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Fytonyashka.Services;
 using Fytonyashka.DTOs;
-using Fytonyashka.Pages.DataModels;
+using Fytonyashka.DataModels;
 
 namespace Fytonyashka.Pages.User
 {
