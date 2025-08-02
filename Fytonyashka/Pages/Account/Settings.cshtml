@@ -8,6 +8,16 @@
     <h2>Settings</h2>
     <div class="card shadow-sm border rounded p-4">
         <h5 class="card-title">Change password</h5>
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""].Errors.Count > 0)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @foreach (var error in ViewData.ModelState[""].Errors)
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <form method="post">
             <input type="hidden" asp-for="ChangePasswordInput.Id" />
 
@@ -19,11 +29,25 @@
 
             <div class="form-group mb-3">
                 <label asp-for="ChangePasswordInput.NewPassword">New password</label>
-                <input asp-for="ChangePasswordInput.NewPassword" class="form-control" type="password" />
+                <input asp-for="ChangePasswordInput.NewPassword" class="form-control" type="password" id="passwordInput" />
                 <span asp-validation-for="ChangePasswordInput.NewPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mt-2">
+                <input type="checkbox" class="form-check-input" id="showPasswordCheckbox" onclick="togglePasswordVisibility()" />
+                <label class="form-check-label" for="showPasswordCheckbox">Show password</label>
             </div>
 
             <button type="submit" class="btn btn-primary mt-2">Change</button>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+}

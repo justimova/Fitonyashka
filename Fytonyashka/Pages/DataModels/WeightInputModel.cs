@@ -7,9 +7,10 @@ public class WeightInputModel
 
     public int UserId { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Date is required")]
     public DateTime Date { get; set; } = DateTime.Now;
 
-    [Required]
+    [Required(ErrorMessage = "Weight is required")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "Weight must be greater than 0")]
     public double Weight { get; set; }
 }
