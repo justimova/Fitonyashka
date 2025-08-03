@@ -1,0 +1,59 @@
+﻿@page
+@model Fytonyashka.Pages.Account.SignUpModel
+@{
+    ViewData["Title"] = "Sign up";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12" style="max-width: 500px;">
+            <h2>Sign up</h2>
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(x => x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid))
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @foreach (var item in ViewData.ModelState.Values.Where(x => x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid))
+                    {
+                        foreach (var error in item.Errors)
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    }
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="SignUpInput.UserName">Username</label>
+                    <input asp-for="SignUpInput.UserName" class="form-control" />
+                    <span asp-validation-for="SignUpInput.UserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SignUpInput.Email">Email</label>
+                    <input asp-for="SignUpInput.Email" class="form-control" type="email" />
+                    <span asp-validation-for="SignUpInput.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SignUpInput.Password">Password</label>
+                    <input asp-for="SignUpInput.Password" class="form-control" type="password" id="passwordInput" />
+                    <span asp-validation-for="SignUpInput.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="showPasswordCheckbox" onclick="togglePasswordVisibility()" />
+                    <label class="form-check-label" for="showPasswordCheckbox">Show password</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Sign up</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        }</script>
+}

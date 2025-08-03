@@ -1,4 +1,4 @@
-﻿using Fytonyashka.Pages.DataModels;
+﻿using Fytonyashka.DataModels;
 using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,7 +20,8 @@ namespace Fytonyashka.Pages.Account
             string username = HttpContext.Session.GetString("Username");
             var userDto = _userService.GetByUsername(username);
             if (userDto == null) {
-                return NotFound(); // TODO: #2
+                ModelState.AddModelError("", "User doesn't exist. Try later or text our support");
+                return Page();
             }
 
             ChangePasswordInput.Id = userDto.Id;
@@ -34,7 +35,7 @@ namespace Fytonyashka.Pages.Account
             }
 
             if (!_userService.CheckPassword(ChangePasswordInput.Id, ChangePasswordInput.Password)) {
-                ModelState.AddModelError("ChangePasswordInput.Password", "Current password is incorrect.");
+                ModelState.AddModelError("ChangePasswordInput.Password", "Current password is incorrect");
                 return Page();
             }
 

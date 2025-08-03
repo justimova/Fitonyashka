@@ -41,6 +41,25 @@
     <!-- Profile Form Block -->
     <div class="card shadow-sm border rounded p-4">
         <h5 class="card-title">Profile Information</h5>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(x => x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @foreach (var item in ViewData.ModelState.Values.Where(x => x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid))
+                {
+                    foreach(var error in item.Errors) {
+                        <div>@error.ErrorMessage</div>
+                    }
+                }
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <form method="post" asp-page-handler="ChangeUserProfile">
             <input type="hidden" asp-for="UserProfileInput.Id" />
 

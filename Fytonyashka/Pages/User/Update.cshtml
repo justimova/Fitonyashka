@@ -6,25 +6,35 @@
 
 <div class="container">
     <h2>Update User</h2>
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""].Errors.Count > 0)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @foreach (var error in ViewData.ModelState[""].Errors)
+            {
+                <div>@error.ErrorMessage</div>
+            }
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <form method="post">
         <input type="hidden" asp-for="UserInput.Id" />
         <div class="form-group">
             <label asp-for="UserInput.Username">Username</label>
             <input asp-for="UserInput.Username" class="form-control" readonly />
         </div>
-        
+
         <div class="form-group">
             <label asp-for="UserInput.Email">Email</label>
             <input asp-for="UserInput.Email" class="form-control" type="email" />
             <span asp-validation-for="UserInput.Email" class="text-danger"></span>
         </div>
-        
+
         <div class="form-group">
             <label asp-for="UserInput.Password">Password</label>
             <input asp-for="UserInput.Password" class="form-control" type="password" />
             <span asp-validation-for="UserInput.Password" class="text-danger"></span>
         </div>
-        
+
         <button type="submit" class="btn btn-primary mt-3">Update User</button>
     </form>
 </div>

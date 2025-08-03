@@ -1,18 +1,19 @@
-using Fytonyashka.DataModels;
+﻿using Fytonyashka.DataModels;
+using Fytonyashka.DTOs;
 using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Fytonyashka.Pages.Account
 {
-    public class LoginModel : PageModel
+    public class SignUpModel : PageModel
     {
         private readonly IUserService _userService;
 
         [BindProperty]
-        public LoginInputModel LoginInput { get; set; } = new LoginInputModel();
+        public SignUpInputModel SignUpInput { get; set; } = new SignUpInputModel();
 
-        public LoginModel(IUserService userService) {
+        public SignUpModel(IUserService userService) {
             _userService = userService;
         }
 
@@ -21,10 +22,14 @@ namespace Fytonyashka.Pages.Account
                 return Page();
             }
 
-            if (_userService.Login(LoginInput.UserName, LoginInput.Password))
-            {
-                var userDto = _userService.GetByUsername(LoginInput.UserName);
-                HttpContext.Session.SetString("Username", LoginInput.UserName);
+            var userDto = new UserDto {
+                UserName = SignUpInput.UserName,
+                Email = SignUpInput.Email,
+                Password = SignUpInput.Password
+            };
+            if (_userService.Create(userDto)) {
+                userDto = _userService.GetByUsername(SignUpInput.UserName);
+                HttpContext.Session.SetString("Username", SignUpInput.UserName);
                 HttpContext.Session.SetString("AvatarFileName", userDto?.AvatarFileName ?? "");
                 HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
                 return RedirectToPage("/Index");
