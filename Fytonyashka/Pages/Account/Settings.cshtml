@@ -6,7 +6,7 @@
 
 <div class="container">
     <h2>Settings</h2>
-    <div class="card shadow-sm border rounded p-4">
+    <div class="card shadow-sm border rounded p-4 mb-4">
         <h5 class="card-title">Change password</h5>
         @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""].Errors.Count > 0)
         {
@@ -41,13 +41,24 @@
             <button type="submit" class="btn btn-primary mt-2">Change</button>
         </form>
     </div>
+    <div class="card shadow-sm border rounded p-4">
+        <h5 class="card-title">Delete account</h5>
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
+
+            <div>
+                Warning! After delete your account you can't restore it
+            </div>
+        </div>
+        <form method="post" asp-page-handler="Delete" class="flex-grow-1">
+            <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete your accou?')">Delete</button>
+        </form>
+    </div>
 </div>
 
-@section Scripts {
-    <script>
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('passwordInput');
-            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-        }
-    </script>
-}
+    @section Scripts {
+        <script>function togglePasswordVisibility() {
+                const passwordInput = document.getElementById('passwordInput');
+                passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+            }</script>
+    }

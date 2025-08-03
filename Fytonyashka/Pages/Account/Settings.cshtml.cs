@@ -42,5 +42,21 @@ namespace Fytonyashka.Pages.Account
             _userService.ChangePassword(ChangePasswordInput.Id, ChangePasswordInput.NewPassword);
             return RedirectToPage();
         }
+
+        public IActionResult OnPostDelete() {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var result = _userService.Delete(userId);
+            if (!result) {
+                TempData["Error"] = "Failed to delete user";
+                return Page();
+            }
+
+            string? username = HttpContext.Session?.GetString("Username");
+            _userService.Logout(username);
+            HttpContext.Session?.Remove("Username");
+            HttpContext.Session?.Remove("UserId");
+            HttpContext.Session?.Remove("AvatarFileName");
+            return RedirectToPage("/Index");
+        }
     }
 }
