@@ -54,7 +54,7 @@ namespace Fytonyashka.Pages.Account
                 return Page();
             }
 
-            _userService.Update(new UserDto {
+            var result = _userService.Update(new UserDto {
                 Id = UserProfileInput.Id,
                 UserName = UserProfileInput.Username,
                 Email = UserProfileInput.Email,
@@ -63,6 +63,11 @@ namespace Fytonyashka.Pages.Account
                 Gender = UserProfileInput.Gender,
                 Height = UserProfileInput.Height,
             });
+
+            if (!result.IsSuccess) {
+                ModelState.AddModelError("", result.ErrorMessage);
+                return Page();
+            }
 
             TempData["SuccessMessage"] = "Profile saved successfully";
             return RedirectToPage("/Account/UserProfile");

@@ -5,13 +5,13 @@ namespace Fytonyashka.Services
 {
     public interface IUserService
     {
-        bool Create(UserDto userDto);
+        UserSaveResultDto Create(UserDto userDto);
         bool Login(string username, string password);
         void Logout(string username);
         List<UserDto> GetAll();
         bool Delete(int id);
         UserDto GetById(int id);
-        bool Update(UserDto userDto);
+        UserSaveResultDto Update(UserDto userDto);
         UserDto GetByUsername(string username);
         void RemoveAvatar(int id);
         void UpdateAvatar(int id, string avatarFileName);
@@ -60,22 +60,32 @@ namespace Fytonyashka.Services
             File.WriteAllText(_dataFilePath, usersJson);
         }
 
-        public bool Create(UserDto userDto) {
+        private UserSaveResultDto CreateErrorResult(string errorMessage) =>
+            new() { IsSuccess = false, ErrorMessage = errorMessage };
+
+        private UserSaveResultDto CreateSuccessResult() => new();
+
+        public UserSaveResultDto Create(UserDto userDto) {
+            if(_users.Any(u => u.UserName == userDto.UserName)) {
+                return CreateErrorResult("A user with this username already exists");
+            }
+            if (_users.Any(u => u.Email == userDto.Email)) {
+                return CreateErrorResult("A user with this email already exists");
+            }
             try {
                 userDto.Id = _nextId++;
                 _users.Add(userDto);
                 SaveToFile();
-                return true;
+                return CreateSuccessResult();
             } catch (Exception) {
-                return false;
+                return CreateErrorResult("Failed to save user data. Try later or text our support");
             }
         }
 
         public List<UserDto> GetAll() => _users;
 
         public bool Delete(int id){
-            foreach (UserDto user in _users)
-            {
+            foreach (UserDto user in _users) {
                 if (user.Id == id) {
                     _users.Remove(user);
                     SaveToFile();
@@ -94,10 +104,13 @@ namespace Fytonyashka.Services
             return null;
         }
 
-        public bool Update(UserDto userDto) {
+        public UserSaveResultDto Update(UserDto userDto) {
+            if (_users.Any(u => u.Id != userDto.Id && u.Email == userDto.Email)) {
+                return CreateErrorResult("A user with this email already exists");
+            }
             var user = GetById(userDto.Id);
             if (user == null) {
-                return false;
+                return CreateErrorResult("The user not found");
             }
             if (!string.IsNullOrEmpty(userDto.Password)) {
                 user.Password = userDto.Password;
@@ -108,7 +121,7 @@ namespace Fytonyashka.Services
             user.Height = userDto.Height;
             user.FirstName = userDto.FirstName;
             SaveToFile();
-            return true;
+            return CreateSuccessResult();
         }
 
         public UserDto GetByUsername(string username) {

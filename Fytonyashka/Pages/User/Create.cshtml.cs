@@ -28,7 +28,7 @@ namespace Fytonyashka.Pages.User
 
             var result = _userService.Create(userDto);
 
-            if (result) {
+            if (result.IsSuccess) {
                 return RedirectToPage("/User/Users");
             }
             

@@ -27,16 +27,18 @@ namespace Fytonyashka.Pages.Account
                 Email = SignUpInput.Email,
                 Password = SignUpInput.Password
             };
-            if (_userService.Create(userDto)) {
-                userDto = _userService.GetByUsername(SignUpInput.UserName);
-                HttpContext.Session.SetString("Username", SignUpInput.UserName);
-                HttpContext.Session.SetString("AvatarFileName", userDto?.AvatarFileName ?? "");
-                HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
-                return RedirectToPage("/Index");
+
+            var result = _userService.Create(userDto);
+            if (!result.IsSuccess) {
+                ModelState.AddModelError("", result.ErrorMessage);
+                return Page();
             }
 
-            ModelState.AddModelError("", "You entered wrong username or password");
-            return Page();
+            _userService.Login(userDto.UserName, userDto.Email);
+            HttpContext.Session.SetString("Username", userDto.UserName);
+            HttpContext.Session.SetString("AvatarFileName", userDto?.AvatarFileName ?? "");
+            HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
+            return RedirectToPage("/Index");
         }
     }
 }
