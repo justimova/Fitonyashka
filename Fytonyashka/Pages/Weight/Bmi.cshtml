@@ -1,0 +1,63 @@
+﻿@page
+@model Fytonyashka.Pages.Weight.BmiModel
+@{
+    ViewData["Title"] = "BMI Calculator";
+}
+
+<div class="container mt-5">
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <h4>Your BMI</h4>
+            <h1 class="display-4">@Model.CurrentBmi.BmiValue.ToString("F1")</h1>
+            <p class="lead">@Model.CurrentBmi.BmiCategory</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Calculate your BMI</h5>
+            <form method="post">
+                <input asp-for="CurrentBmi.Weight" type="hidden" />
+                <input asp-for="CurrentBmi.Height" type="hidden" />
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="CalculatedBmi.Weight" class="form-label">Weight (kg)</label>
+                        <input asp-for="CalculatedBmi.Weight" class="form-control" type="number" step="0.1" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="CalculatedBmi.Height" class="form-label">Height (cm)</label>
+                        <input asp-for="CalculatedBmi.Height" class="form-control" type="number" step="0.1" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate</button>
+            </form>
+            <div class="alert alert-info mt-3">
+                <strong>Your BMI:</strong> @Model.CalculatedBmi.BmiValue.ToString("F1") –
+                @Model.CalculatedBmi.BmiCategory
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">BMI Categories</h5>
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>BMI</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bmiRange in Model.BmiRanges)
+                    {
+                        <tr>
+                            <td>@Model.GetFormatBmiRange(bmiRange.Min, bmiRange.Max)</td>
+                            <td>@bmiRange.Category</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
