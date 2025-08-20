@@ -11,8 +11,7 @@ public class BmiModel : PageModel
     private readonly IWeightService _weightService;
     public List<BmiRange> BmiRanges => Bmi.BmiRanges;
 
-    public BmiModel(IUserService userService, IWeightService weightService)
-    {
+    public BmiModel(IUserService userService, IWeightService weightService) {
         _userService = userService;
         _weightService = weightService;
     }
@@ -32,7 +31,7 @@ public class BmiModel : PageModel
         }
         var lastWeight = _weightService.GetLastByUserId(userDto.Id);
         CurrentBmi.Height = CalculatedBmi.Height = userDto.Height;
-        CurrentBmi.Weight = CalculatedBmi.Weight = lastWeight.HasValue ? lastWeight.Value : 0;
+        CurrentBmi.Weight = CalculatedBmi.Weight = (double)lastWeight?.Weight;
 
         return Page();
     }

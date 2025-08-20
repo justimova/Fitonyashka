@@ -17,10 +17,12 @@
     <Folder Include="Data\UserImages\" />
     <Folder Include="Core\" />
     <Folder Include="Core\DateRange\" />
+    <Folder Include="Pages\Goal\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Data\UserImages\" />
     <None Remove="Core\" />
     <None Remove="Core\DateRange\" />
+    <None Remove="Pages\Goal\" />
   </ItemGroup>
 </Project>

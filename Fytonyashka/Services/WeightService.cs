@@ -10,7 +10,7 @@ public interface IWeightService
     bool Delete(int id);
     bool Update(WeightDto weightDto);
     WeightDto GetById(int id);
-    int? GetLastByUserId(int userId);
+    WeightDto GetLastByUserId(int userId);
     List<WeightDto> GetAllByUserId(int userId);
 }
 
@@ -103,7 +103,7 @@ internal class WeightService : IWeightService
         return null;
     }
 
-    public int? GetLastByUserId(int userId) => (int?)(GetAllByUserId(userId).FirstOrDefault()?.Weight);
+    public WeightDto GetLastByUserId(int userId) => GetAllByUserId(userId).FirstOrDefault();
 
     public List<WeightDto> GetAllByUserId(int userId) => GetAll().Where(w => w.UserId == userId).ToList();
 }
