@@ -20,7 +20,7 @@ namespace Fytonyashka.Pages.Weight
         public IActionResult OnGet(int weightId) {
             var weight = _weightService.GetById(weightId);
             if (weight == null) {
-                return NotFound();
+                return Page();
             }
             WeightInput = new WeightInputModel {
                 Id = weight.Id,

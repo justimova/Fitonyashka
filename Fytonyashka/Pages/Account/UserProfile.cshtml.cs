@@ -42,7 +42,7 @@ namespace Fytonyashka.Pages.Account
                 Gender = userDto.Gender,
                 FirstName = userDto.FirstName,
                 Height = userDto.Height,
-                Weight = _weightService.GetLastByUserId(userDto.Id),
+                Weight = _weightService.GetLastByUserId(userDto.Id)?.Weight,
                 AvatarFileName = userDto.AvatarFileName
             };
 
