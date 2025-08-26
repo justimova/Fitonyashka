@@ -28,8 +28,8 @@ namespace Fytonyashka.Pages.Goal
                 var lastWeight = _weightService.GetLastByUserId(userId);
                 InputGoal = new UserGoalModel {
                     Weight = 0,
-                    InitialWeight = lastWeight.Weight,
-                    StartDate = lastWeight.Date
+                    InitialWeight = lastWeight?.Weight ?? 0,
+                    StartDate = lastWeight?.Date ?? DateTime.UtcNow.Date
                 };
                 return Page();
             }
