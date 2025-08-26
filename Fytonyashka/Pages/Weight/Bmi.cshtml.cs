@@ -17,7 +17,7 @@ public class BmiModel : PageModel
     }
 
     [BindProperty]
-    public Bmi CurrentBmi { get; set; } = new Bmi();
+    public Bmi CurrentBmi { get; set; }
 
     [BindProperty]
     public Bmi CalculatedBmi { get; set; } = new Bmi();
@@ -30,8 +30,12 @@ public class BmiModel : PageModel
             return Page();
         }
         var lastWeight = _weightService.GetLastByUserId(userDto.Id);
-        CurrentBmi.Height = CalculatedBmi.Height = userDto.Height;
-        CurrentBmi.Weight = CalculatedBmi.Weight = (double)lastWeight?.Weight;
+        if(lastWeight != null) {
+            CurrentBmi = new Bmi {
+                Height = CalculatedBmi.Height = userDto.Height,
+                Weight = CalculatedBmi.Weight = (double)lastWeight?.Weight
+            };
+        }
 
         return Page();
     }
