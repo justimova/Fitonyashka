@@ -8,8 +8,15 @@
     <div class="card mb-4">
         <div class="card-body text-center">
             <h4>Your BMI</h4>
-            <h1 class="display-4">@Model.CurrentBmi.BmiValue.ToString("F1")</h1>
-            <p class="lead">@Model.CurrentBmi.BmiCategory</p>
+            @if (Model.CurrentBmi != null)
+            {
+                <h1 class="display-4">@Model.CurrentBmi.BmiValue.ToString("F1")</h1>
+                <p class="lead">@Model.CurrentBmi.BmiCategory</p>
+            }
+            else
+            {
+                <p>&mdash;</p>
+            }
         </div>
     </div>
 
