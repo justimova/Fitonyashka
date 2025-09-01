@@ -3,6 +3,7 @@ using Fytonyashka.DataModels;
 using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Fytonyashka.Services.Interfaces;
 
 namespace Fytonyashka.Pages.Goal
 {

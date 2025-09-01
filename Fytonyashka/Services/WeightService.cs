@@ -1,109 +1,66 @@
-using System.Text.Json;
+﻿using Fytonyashka.DataAccessLayer.Entities;
+using Fytonyashka.DataAccessLayer.Repositories;
 using Fytonyashka.DTOs;
+using Fytonyashka.Services.Interfaces;
 
 namespace Fytonyashka.Services;
 
-public interface IWeightService
+public class WeightService : IWeightService
 {
-    bool Create(WeightDto weightDto);
-    List<WeightDto> GetAll();
-    bool Delete(int id);
-    bool Update(WeightDto weightDto);
-    WeightDto GetById(int id);
-    WeightDto GetLastByUserId(int userId);
-    List<WeightDto> GetAllByUserId(int userId);
-}
+    private readonly IWeightRepository _weightRepository;
 
-internal class WeightService : IWeightService
-{
-    private int _nextId = 1;
-    private readonly string _dataFilePath;
-    private List<WeightDto> _weights = new List<WeightDto>();
-
-    public WeightService() {
-        string baseDirectory = Directory.GetCurrentDirectory();
-        string dataDirectory = Path.Combine(baseDirectory, "Data");
-        if (!Directory.Exists(dataDirectory)) {
-            Directory.CreateDirectory(dataDirectory);
-        }
-        _dataFilePath = Path.Combine(dataDirectory, "weights.json");
-
-        if (File.Exists(_dataFilePath)) {
-            Load();
-        }
-    }
-
-    private void Load() {
-        string weightsJson = File.ReadAllText(_dataFilePath);
-        _weights = JsonSerializer.Deserialize<List<WeightDto>>(weightsJson) ?? new List<WeightDto>();
-        InitializeNextId();
-    }
-
-    private void InitializeNextId() {
-        foreach (WeightDto weight in _weights) {
-            if (weight.Id >= _nextId) {
-                _nextId = weight.Id + 1;
-            }
-        }
-    }
-
-    private void SaveToFile() {
-        string weightsJson = JsonSerializer.Serialize(_weights,
-            new JsonSerializerOptions { WriteIndented = true }); // pretty print
-        File.WriteAllText(_dataFilePath, weightsJson);
+    public WeightService(IWeightRepository weightRepository) {
+        _weightRepository = weightRepository;
     }
 
     public bool Create(WeightDto weightDto) {
-        try {
-            var weight = GetAllByUserId(weightDto.UserId)
-                .FirstOrDefault(w => w.Date == weightDto.Date);
-            if (weight != null) {
-                weight.Weight = weightDto.Weight;
-            } else {
-                weightDto.Id = _nextId++;
-                _weights.Add(weightDto);
-            }
-            SaveToFile();
-            return true;
-        } catch (Exception) {
-            return false;
+        var weight = GetAllByUserId(weightDto.UserId)
+            .FirstOrDefault(w => w.Date == weightDto.Date);
+        if (weight != null) {
+            weightDto.Id = weight.Id;
+            return Update(weightDto);
         }
-    }
-
-    public List<WeightDto> GetAll() => _weights.OrderByDescending(w => w.Date).ToList();
-
-    public bool Delete(int id){
-        foreach (WeightDto weight in _weights) {
-            if (weight.Id == id) {
-                _weights.Remove(weight);
-                SaveToFile();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool Update(WeightDto weightDto) {
-        var weight = GetById(weightDto.Id);
-        if (weight == null) {
-            return false;
-        }
-
-        weight.Weight = weightDto.Weight;
-        SaveToFile();
+        var entity = Map(weightDto);
+        _weightRepository.Add(entity);
         return true;
     }
 
+    public bool Delete(int id) {
+        _weightRepository.Delete(id);
+        return true;
+    }
+
+    public List<WeightDto> GetAll() {
+        var entities = _weightRepository.GetAll().OrderByDescending(w => w.Date);
+        return entities.Select(Map).ToList();
+    }
+
+    public List<WeightDto> GetAllByUserId(int userId) => GetAll().Where(w => w.UserId == userId).ToList();
+
     public WeightDto GetById(int id) {
-        foreach (WeightDto weight in _weights) {
-            if (weight.Id == id) {
-                return weight;
-            }
-        }
-        return null;
+        var entity = _weightRepository.GetAll().FirstOrDefault(e => e.Id == id);
+        return Map(entity);
     }
 
     public WeightDto GetLastByUserId(int userId) => GetAllByUserId(userId).FirstOrDefault();
 
-    public List<WeightDto> GetAllByUserId(int userId) => GetAll().Where(w => w.UserId == userId).ToList();
+    public bool Update(WeightDto weightDto) {
+        var entity = Map(weightDto);
+        _weightRepository.Update(entity);
+        return true;
+    }
+
+    private WeightDto Map(WeightEntity entity) => new WeightDto {
+        Date = entity.Date,
+        Weight = entity.Weight,
+        Id = entity.Id,
+        UserId = entity.UserId
+    };
+
+    private WeightEntity Map(WeightDto dto) => new WeightEntity {
+        Date = dto.Date,
+        Weight = dto.Weight,
+        Id = dto.Id,
+        UserId = dto.UserId
+    };
 }
