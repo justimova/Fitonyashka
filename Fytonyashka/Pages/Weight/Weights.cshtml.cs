@@ -72,8 +72,8 @@ namespace Fytonyashka.Pages
 
         public IActionResult OnPostDelete(int id) {
            var result = _weightService.Delete(id);
-           if (!result) {
-               TempData["Error"] = "Failed to delete record";
+           if (!result.IsSuccess) {
+               TempData["Error"] = result.ErrorMessage;
            }
            return RedirectToPage();
         }

@@ -13,21 +13,39 @@ public class WeightService : IWeightService
         _weightRepository = weightRepository;
     }
 
-    public bool Create(WeightDto weightDto) {
+    public ResultDto Create(WeightDto weightDto) {
         var weight = GetAllByUserId(weightDto.UserId)
             .FirstOrDefault(w => w.Date == weightDto.Date);
         if (weight != null) {
             weightDto.Id = weight.Id;
             return Update(weightDto);
         }
-        var entity = Map(weightDto);
-        _weightRepository.Add(entity);
-        return true;
+        try {
+            var entity = Map(weightDto);
+            _weightRepository.Add(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to enter weight");
+        }
     }
 
-    public bool Delete(int id) {
-        _weightRepository.Delete(id);
-        return true;
+    public ResultDto Update(WeightDto weightDto) {
+        try {
+            var entity = Map(weightDto);
+            _weightRepository.Update(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to update weight");
+        }
+    }
+
+    public ResultDto Delete(int id) {
+        try {
+            _weightRepository.Delete(id);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to delete weight");
+        }
     }
 
     public List<WeightDto> GetAll() {
@@ -43,12 +61,6 @@ public class WeightService : IWeightService
     }
 
     public WeightDto GetLastByUserId(int userId) => GetAllByUserId(userId).FirstOrDefault();
-
-    public bool Update(WeightDto weightDto) {
-        var entity = Map(weightDto);
-        _weightRepository.Update(entity);
-        return true;
-    }
 
     private WeightDto Map(WeightEntity entity) => new WeightDto {
         Date = entity.Date,
