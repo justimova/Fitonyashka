@@ -20,6 +20,7 @@ builder.Services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
 builder.Services.AddSingleton<IWeightDateRangeService, WeightDateRangeService>();
 builder.Services.AddSingleton<IUserGoalService, UserGoalService>();
 builder.Services.AddTransient<IWeightRepository, WeightRepository>();
+builder.Services.AddTransient<IUserGoalRepository, UserGoalRepository>();
 
 var app = builder.Build();
 
