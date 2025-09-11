@@ -1,8 +1,8 @@
 using Fytonyashka.DTOs;
 using Fytonyashka.DataModels;
-using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Fytonyashka.Services.Interfaces;
 
 namespace Fytonyashka.Pages.User
 {
@@ -25,7 +25,7 @@ namespace Fytonyashka.Pages.User
             UserInput = new UserInputModel {
                 Id = userDto.Id,
                 Username = userDto.UserName,
-                Email = userDto.Email,
+                Email = userDto.Email
             };
             return Page();
         }

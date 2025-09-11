@@ -22,6 +22,7 @@ builder.Services.AddSingleton<IUserGoalService, UserGoalService>();
 builder.Services.AddTransient<IWeightRepository, WeightRepository>();
 builder.Services.AddTransient<IUserGoalRepository, UserGoalRepository>();
 builder.Services.AddTransient<IWeightDateRangeRepository, WeightDateRangeRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

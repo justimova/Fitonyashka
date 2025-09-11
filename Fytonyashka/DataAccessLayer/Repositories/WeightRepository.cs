@@ -12,8 +12,7 @@ public interface IWeightRepository
 
 internal class WeightRepository : JsonFileRepository<WeightEntity>, IWeightRepository
 {
-    protected override string GetEntityName()
-    {
+    protected override string GetEntityName() {
         return "weight";
     }
 }

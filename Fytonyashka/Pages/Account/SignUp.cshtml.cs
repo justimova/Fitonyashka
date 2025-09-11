@@ -1,6 +1,6 @@
 ﻿using Fytonyashka.DataModels;
 using Fytonyashka.DTOs;
-using Fytonyashka.Services;
+using Fytonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -21,22 +21,19 @@ namespace Fytonyashka.Pages.Account
             if (!ModelState.IsValid) {
                 return Page();
             }
-
             var userDto = new UserDto {
                 UserName = SignUpInput.UserName,
                 Email = SignUpInput.Email,
                 Password = SignUpInput.Password
             };
-
             var result = _userService.Create(userDto);
             if (!result.IsSuccess) {
                 ModelState.AddModelError("", result.ErrorMessage);
                 return Page();
             }
-
             _userService.Login(userDto.UserName, userDto.Email);
             HttpContext.Session.SetString("Username", userDto.UserName);
-            HttpContext.Session.SetString("AvatarFileName", userDto?.AvatarFileName ?? "");
+            HttpContext.Session.SetString("AvatarFileName", "");
             HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
             return RedirectToPage("/Index");
         }

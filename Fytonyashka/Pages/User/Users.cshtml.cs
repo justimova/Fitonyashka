@@ -1,5 +1,5 @@
 using Fytonyashka.DataModels;
-using Fytonyashka.Services;
+using Fytonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -28,7 +28,7 @@ namespace Fytonyashka.Pages
 
         public IActionResult OnPostDelete(int id) {
             var result = _userService.Delete(id);
-            if (!result) {
+            if (!result.IsSuccess) {
                 TempData["Error"] = "Failed to delete user";
             }
             return RedirectToPage();

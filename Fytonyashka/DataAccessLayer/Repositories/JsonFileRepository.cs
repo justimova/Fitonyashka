@@ -48,6 +48,12 @@ internal abstract class JsonFileRepository<TEntity> where TEntity: class, IIdent
         SaveToFile();
     }
 
+    public bool IsExist(Func<TEntity, bool> isEqualFunc) {
+        return _entities.Any(e => isEqualFunc(e));
+    }
+
+    public TEntity GetById(int id) => _entities.FirstOrDefault(e => e.Id == id);
+
     protected abstract string GetEntityName();
 
     private void Load() {

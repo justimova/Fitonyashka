@@ -46,16 +46,14 @@ namespace Fytonyashka.Pages.Account
                 Weight = _weightService.GetLastByUserId(userDto.Id)?.Weight,
                 AvatarFileName = userDto.AvatarFileName
             };
-
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync() {
+        public IActionResult OnPost() {
             if (!ModelState.IsValid) {
                 return Page();
             }
-
-            var result = _userService.Update(new UserDto {
+            var result = _userService.Update(new UserProfileDto {
                 Id = UserProfileInput.Id,
                 UserName = UserProfileInput.Username,
                 Email = UserProfileInput.Email,
@@ -64,12 +62,10 @@ namespace Fytonyashka.Pages.Account
                 Gender = UserProfileInput.Gender,
                 Height = UserProfileInput.Height,
             });
-
             if (!result.IsSuccess) {
                 ModelState.AddModelError("", result.ErrorMessage);
                 return Page();
             }
-
             TempData["SuccessMessage"] = "Profile saved successfully";
             return RedirectToPage("/Account/UserProfile");
         }
@@ -86,16 +82,13 @@ namespace Fytonyashka.Pages.Account
                 }
                 fileName = Path.GetFileName(avatarPath);
             }
-
             _userService.UpdateAvatar(UserProfileInput.Id, fileName);
-            
             if (!string.IsNullOrEmpty(fileName)) {
                 HttpContext.Session.SetString("AvatarFileName", fileName);
             }
             else {
                 HttpContext.Session?.Remove("AvatarFileName");
             }
-
             return RedirectToPage();
         }
 
