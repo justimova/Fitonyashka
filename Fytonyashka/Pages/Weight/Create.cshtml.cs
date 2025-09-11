@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Fytonyashka.Services;
 using Fytonyashka.DTOs;
 using Fytonyashka.DataModels;
+using Fytonyashka.Services.Interfaces;
 
 namespace Fytonyashka.Pages.Weight
 {
@@ -48,11 +48,11 @@ namespace Fytonyashka.Pages.Weight
             };
             var result = _weightService.Create(weightDto);
 
-            if (result) {
+            if (result.IsSuccess) {
                 return RedirectToPage("/Weight/Weights");
             }
             
-            ModelState.AddModelError("", "Failed to enter weight");
+            ModelState.AddModelError("", result.ErrorMessage);
             return Page();
         } 
     }

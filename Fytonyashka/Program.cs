@@ -1,4 +1,6 @@
+using Fytonyashka.DataAccessLayer.Repositories;
 using Fytonyashka.Services;
+using Fytonyashka.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,10 @@ builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
 builder.Services.AddSingleton<IWeightDateRangeService, WeightDateRangeService>();
 builder.Services.AddSingleton<IUserGoalService, UserGoalService>();
+builder.Services.AddTransient<IWeightRepository, WeightRepository>();
+builder.Services.AddTransient<IUserGoalRepository, UserGoalRepository>();
+builder.Services.AddTransient<IWeightDateRangeRepository, WeightDateRangeRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

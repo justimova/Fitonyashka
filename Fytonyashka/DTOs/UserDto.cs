@@ -1,11 +1,22 @@
 namespace Fytonyashka.DTOs;
 
-public class UserDto
+public interface IUserDto
 {
-    public int Id { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
+    string UserName { get; set; }
+    int Id { get; set; }
+    string Email { get; set; }
+}
+
+public class UserDto : UserProfileDto
+{
     public string Password { get; set; }
+}
+
+public class UserProfileDto : IUserDto
+{
+    public string UserName { get; set; }
+    public int Id { get; set; }
+    public string Email { get; set; }
     public string FirstName { get; set; }
     public DateTime Birthday { get; set; }
     public int Gender { get; set; }

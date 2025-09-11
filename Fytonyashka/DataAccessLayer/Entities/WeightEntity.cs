@@ -1,6 +1,6 @@
-namespace Fytonyashka.DTOs;
+﻿namespace Fytonyashka.DataAccessLayer.Entities;
 
-public class WeightDto
+public class WeightEntity : IIdentifiable
 {
     public int Id { get; set; }
     public int UserId { get; set; }

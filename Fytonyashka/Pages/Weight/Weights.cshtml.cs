@@ -5,6 +5,7 @@ using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Fytonyashka.Services.Interfaces;
 
 namespace Fytonyashka.Pages
 {
@@ -36,8 +37,9 @@ namespace Fytonyashka.Pages
         }
 
         public void OnGet() {
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var userDto = _userService.GetById(userId);
+            string userName = HttpContext.Session.GetString("UserName") ?? "";
+            var userDto = _userService.GetByUsername(userName);
+            int userId = userDto.Id;
             Weights = _weightService.GetAllByUserId(userId)
                 .Select(w => new WeightInputModel {
                     Id = w.Id,
@@ -71,8 +73,8 @@ namespace Fytonyashka.Pages
 
         public IActionResult OnPostDelete(int id) {
            var result = _weightService.Delete(id);
-           if (!result) {
-               TempData["Error"] = "Failed to delete record";
+           if (!result.IsSuccess) {
+               TempData["Error"] = result.ErrorMessage;
            }
            return RedirectToPage();
         }

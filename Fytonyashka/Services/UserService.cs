@@ -1,191 +1,189 @@
-using System.Text.Json;
+﻿using Fytonyashka.DataAccessLayer.Entities;
+using Fytonyashka.DataAccessLayer.Repositories;
 using Fytonyashka.DTOs;
+using Fytonyashka.Services.Interfaces;
 
-namespace Fytonyashka.Services
-{
-    public interface IUserService
-    {
-        UserSaveResultDto Create(UserDto userDto);
-        bool Login(string username, string password);
-        void Logout(string username);
-        List<UserDto> GetAll();
-        bool Delete(int id);
-        UserDto GetById(int id);
-        UserSaveResultDto Update(UserDto userDto);
-        UserDto GetByUsername(string username);
-        void RemoveAvatar(int id);
-        void UpdateAvatar(int id, string avatarFileName);
-        bool CheckPassword(int id, string password);
-        void ChangePassword(int id, string newPassword);
-        void UpdateDateRange(int userId, int selectedPeriodId);
+namespace Fytonyashka.Services;
+
+public class UserService : IUserService {
+    private readonly IUserRepository _userRepository;
+
+    private static readonly Dictionary<Type, Func<UserEntity, IUserDto, UserEntity>> _mapDelegates = new() {
+        { typeof(UserDto), (UserEntity e, IUserDto d) => Map(e, (UserDto)d) },
+        { typeof(UserProfileDto), (UserEntity e, IUserDto d) => Map(e, (UserProfileDto)d) },
+    };
+
+    public UserService(IUserRepository userRepository) {
+        _userRepository = userRepository;
     }
 
-    internal class UserService : IUserService
-    {
-        private int _nextId = 1;
-        private readonly string _dataFilePath;
-        private List<UserDto> _users = new();
-        private List<string> LoggedUserNames { get; set; } = new List<string>();
-
-        public UserService() {
-            string baseDirectory = Directory.GetCurrentDirectory();
-            string dataDirectory = Path.Combine(baseDirectory, "Data");
-            if (!Directory.Exists(dataDirectory)) {
-                Directory.CreateDirectory(dataDirectory);
-            }
-            _dataFilePath = Path.Combine(dataDirectory, "users.json");
-
-            if (File.Exists(_dataFilePath)) {
-                Load();
-            }
+    public ResultDto ChangePassword(int id, string newPassword) {
+        var entity = _userRepository.GetById(id);
+        entity.Password = newPassword;
+        try {
+            _userRepository.Update(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to change password");
         }
+    }
 
-        private void Load() {
-            string userJsons = File.ReadAllText(_dataFilePath);
-            _users = JsonSerializer.Deserialize<List<UserDto>>(userJsons) ?? new List<UserDto>();
-            InitializeNextId();
+    public bool CheckPassword(int id, string password) {
+        var entity = _userRepository.GetById(id);
+        return entity?.Password == password;
+    }
+
+    public ResultDto Create(UserDto userDto) {
+        if (_userRepository.IsExist(u => u.UserName == userDto.UserName)) {
+            return ResultDto.CreateFailedResult("A user with this username already exists");
         }
-
-        private void InitializeNextId() {
-            foreach (UserDto user in _users) {
-                if (user.Id >= _nextId) {
-                    _nextId = user.Id + 1;
-                }
-            }
+        if (_userRepository.IsExist(u => u.Email == userDto.Email)) {
+            return ResultDto.CreateFailedResult("A user with this email already exists");
         }
-
-        private void SaveToFile() {
-            string usersJson = JsonSerializer.Serialize(_users,
-                new JsonSerializerOptions { WriteIndented = true }); // pretty print
-            File.WriteAllText(_dataFilePath, usersJson);
+        try {
+            var entity = Map(userDto);
+            _userRepository.Add(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to create user");
         }
+    }
 
-        private UserSaveResultDto CreateErrorResult(string errorMessage) =>
-            new() { IsSuccess = false, ErrorMessage = errorMessage };
-
-        private UserSaveResultDto CreateSuccessResult() => new();
-
-        public UserSaveResultDto Create(UserDto userDto) {
-            if(_users.Any(u => u.UserName == userDto.UserName)) {
-                return CreateErrorResult("A user with this username already exists");
-            }
-            if (_users.Any(u => u.Email == userDto.Email)) {
-                return CreateErrorResult("A user with this email already exists");
-            }
-            try {
-                userDto.Id = _nextId++;
-                _users.Add(userDto);
-                SaveToFile();
-                return CreateSuccessResult();
-            } catch (Exception) {
-                return CreateErrorResult("Failed to save user data. Try later or text our support");
-            }
+    public ResultDto Delete(int id) {
+        try {
+            _userRepository.Delete(id);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to delete user");
         }
+    }
 
-        public List<UserDto> GetAll() => _users;
+    public List<UserDto> GetAll() {
+        var entities = _userRepository.GetAll().OrderByDescending(u => u.UserName);
+        return entities.Select(Map).ToList();
+    }
 
-        public bool Delete(int id){
-            foreach (UserDto user in _users) {
-                if (user.Id == id) {
-                    _users.Remove(user);
-                    SaveToFile();
-                    return true;
-                }
-            }
+    public UserDto GetById(int id) {
+        var entity = _userRepository.GetAll().FirstOrDefault(u => u.Id == id);
+        return Map(entity);
+    }
+
+    public UserDto GetByUsername(string username) {
+        var entity = _userRepository.GetAll().FirstOrDefault(u => u.UserName == username);
+        return Map(entity);
+    }
+
+    public bool Login(string username, string password) {
+        UserDto user = GetByUsername(username);
+        if (user == null) {
             return false;
         }
-
-        public UserDto GetById(int id) {
-            foreach (UserDto user in _users) {
-                if (user.Id == id) {
-                    return user;
-                }
-            }
-            return null;
+        if (user.Password == password) {
+            return true;
         }
+        return false;
+    }
 
-        public UserSaveResultDto Update(UserDto userDto) {
-            if (_users.Any(u => u.Id != userDto.Id && u.Email == userDto.Email)) {
-                return CreateErrorResult("A user with this email already exists");
-            }
-            var user = GetById(userDto.Id);
-            if (user == null) {
-                return CreateErrorResult("The user not found");
-            }
-            if (!string.IsNullOrEmpty(userDto.Password)) {
-                user.Password = userDto.Password;
-            }
-            user.Email = userDto.Email;
-            user.Birthday = userDto.Birthday;
-            user.Gender = userDto.Gender;
-            user.Height = userDto.Height;
-            user.FirstName = userDto.FirstName;
-            SaveToFile();
-            return CreateSuccessResult();
+    public ResultDto RemoveAvatar(int id) {
+        var result = UpdateAvatar(id, null);
+        if (!result.IsSuccess) {
+            result.ErrorMessage = "Failed to remove avatar";
         }
+        return result;
+    }
 
-        public UserDto GetByUsername(string username) {
-            foreach (UserDto user in _users) {
-                if (user.UserName == username) {
-                    return user;
-                }
-            }
-            return null;
+    private ResultDto Update<TDto>(TDto userDto)
+            where TDto : class, IUserDto {
+        if (_userRepository.IsExist(u => u.Id != userDto.Id && u.UserName == userDto.UserName)) {
+            return ResultDto.CreateFailedResult("A user with this username already exists");
         }
+        if (_userRepository.IsExist(u => u.Id != userDto.Id && u.Email == userDto.Email)) {
+            return ResultDto.CreateFailedResult("A user with this email already exists");
+        }
+        var entity = _userRepository.GetById(userDto.Id);
+        var map = _mapDelegates.GetValueOrDefault(typeof(TDto));
+        try {
+            map?.Invoke(entity, userDto);
+            _userRepository.Update(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to update user account");
+        }
+    }
+    
+    public ResultDto Update(UserDto userDto) {
+        return Update<UserDto>(userDto);
+    }
 
-        public bool Login(string username, string password) {
-            UserDto user = GetByUsername(username);
-            if (user == null) {
-                return false;
-            }
-            if (user.Password == password) {
-                LoggedUserNames.Add(username);
-                return true;
-            }
-            return false;
-        }
+    public ResultDto Update(UserProfileDto userProfileDto) {
+        return Update(userProfileDto);
+    }
 
-        public void Logout(string username) {
-            if (LoggedUserNames.Contains(username)) {
-                LoggedUserNames.Remove(username);
-            }
+    public ResultDto UpdateAvatar(int id, string avatarFileName) {
+        var entity = _userRepository.GetById(id);
+        entity.AvatarFileName = avatarFileName;
+        try {
+            _userRepository.Update(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to update avatar");
         }
+    }
 
-        public void RemoveAvatar(int id) {
-            UserDto user = GetById(id);
-            if (user != null) {
-                user.AvatarFileName = null;
-                Update(user);
-            }
+    public ResultDto UpdateDateRange(int id, int selectedPeriodId) {
+        var entity = _userRepository.GetById(id);
+        entity.SelectedDateRangeId = selectedPeriodId;
+        try {
+            _userRepository.Update(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to update default period");
         }
+    }
 
-        public void UpdateAvatar(int id, string avatarFileName) {
-            UserDto user = GetById(id);
-            if (user != null) {
-                user.AvatarFileName = avatarFileName;
-                Update(user);
-            }
-        }
+    private UserDto Map(UserEntity entity) => new UserDto {
+        Id = entity.Id,
+        UserName = entity.UserName,
+        Email = entity.Email,
+        Password = entity.Password, 
+        FirstName = entity.FirstName,
+        Birthday = entity.Birthday,
+        Gender = entity.Gender,
+        Height = entity.Height,
+        Weight = entity.Weight,
+        AvatarFileName = entity.AvatarFileName,
+        SelectedDateRangeId = entity.SelectedDateRangeId
+    };
 
-        public bool CheckPassword(int id, string password) {
-            UserDto user = GetById(id);
-            return user != null && user.Password == password;
-        }
+    private UserEntity Map(UserDto dto) => new UserEntity {
+        Id = dto.Id,
+        UserName = dto.UserName,
+        Email = dto.Email,
+        Password = dto.Password,
+        FirstName = dto.FirstName,
+        Birthday = dto.Birthday,
+        Gender = dto.Gender,
+        Height = dto.Height,
+        Weight = dto.Weight,
+        AvatarFileName = dto.AvatarFileName,
+        SelectedDateRangeId = dto.SelectedDateRangeId
+    };
 
-        public void ChangePassword(int id, string newPassword) {
-            UserDto user = GetById(id);
-            if (user != null) {
-                user.Password = newPassword;
-                Update(user);
-            }
+    private static UserEntity Map(UserEntity entity, UserDto dto) {
+        entity.UserName = dto.UserName;
+        entity.Email = dto.Email;
+        if (!string.IsNullOrEmpty(dto.Password)) {
+            entity.Password = dto.Password;
         }
+        return entity;
+    }
 
-        public void UpdateDateRange(int userId, int selectedPeriodId) {
-            UserDto user = GetById(userId);
-            if (user != null)  {
-                user.SelectedDateRangeId = selectedPeriodId;
-                Update(user);
-            }
-        }
+    private static UserEntity Map(UserEntity entity, UserProfileDto dto) {
+        entity.Email = dto.Email;
+        entity.FirstName = dto.FirstName;
+        entity.Birthday = dto.Birthday;
+        entity.Gender = dto.Gender;
+        entity.Height = dto.Height;
+        return entity;
     }
 }

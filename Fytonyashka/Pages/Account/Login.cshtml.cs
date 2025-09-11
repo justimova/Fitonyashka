@@ -1,5 +1,5 @@
 using Fytonyashka.DataModels;
-using Fytonyashka.Services;
+using Fytonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -20,7 +20,6 @@ namespace Fytonyashka.Pages.Account
             if (!ModelState.IsValid) {
                 return Page();
             }
-
             if (_userService.Login(LoginInput.UserName, LoginInput.Password))
             {
                 var userDto = _userService.GetByUsername(LoginInput.UserName);
@@ -29,7 +28,6 @@ namespace Fytonyashka.Pages.Account
                 HttpContext.Session.SetInt32("UserId", userDto?.Id ?? 0);
                 return RedirectToPage("/Index");
             }
-
             ModelState.AddModelError("", "You entered wrong username or password");
             return Page();
         }

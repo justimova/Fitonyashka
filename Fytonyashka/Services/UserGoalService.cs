@@ -1,83 +1,64 @@
-﻿using System.Text.Json;
+﻿using Fytonyashka.DataAccessLayer.Entities;
+using Fytonyashka.DataAccessLayer.Repositories;
 using Fytonyashka.DTOs;
+using Fytonyashka.Services.Interfaces;
 
 namespace Fytonyashka.Services;
 
-public interface IUserGoalService
+public class UserGoalService : IUserGoalService
 {
-    UserGoalResultDto Create(UserGoalDto userGoalDto);
-    UserGoalResultDto Delete(int userId);
-    UserGoalDto GetByUserId(int userId);
-}
+    private readonly IUserGoalRepository _userGoalRepository;
 
-internal class UserGoalService : IUserGoalService
-{
-    private int _nextId = 1;
-    private readonly string _dataFilePath;
-    private List<UserGoalDto> _userGoals = new List<UserGoalDto>();
-
-    public UserGoalService() {
-        string baseDirectory = Directory.GetCurrentDirectory();
-        string dataDirectory = Path.Combine(baseDirectory, "Data");
-        if (!Directory.Exists(dataDirectory)) {
-            Directory.CreateDirectory(dataDirectory);
-        }
-        _dataFilePath = Path.Combine(dataDirectory, "userGoals.json");
-
-        if (File.Exists(_dataFilePath)) {
-            Load();
-        }
+    public UserGoalService(IUserGoalRepository userGoalRepository) {
+        _userGoalRepository = userGoalRepository;
     }
 
-    private void Load() {
-        string goalsJson = File.ReadAllText(_dataFilePath);
-        _userGoals = JsonSerializer.Deserialize<List<UserGoalDto>>(goalsJson) ?? new List<UserGoalDto>();
-        InitializeNextId();
-    }
-
-    private void InitializeNextId() {
-        foreach (UserGoalDto goal in _userGoals) {
-            if (goal.Id >= _nextId) {
-                _nextId = goal.Id + 1;
-            }
-        }
-    }
-
-    private void SaveToFile() {
-        string goalsJson = JsonSerializer.Serialize(_userGoals,
-            new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_dataFilePath, goalsJson);
-    }
-
-    private UserGoalResultDto CreateSuccessResult() => new();
-
-    private UserGoalResultDto CreateErrorResult(string errorMessage) =>
-        new() {
-            IsSuccess = false,
-            ErrorMessage = errorMessage
-        };
-
-    public UserGoalResultDto Create(UserGoalDto userGoalDto) {
+    public ResultDto Create(UserGoalDto userGoalDto)
+    {
         try {
-            userGoalDto.Id = _nextId++;
-            _userGoals.Add(userGoalDto);
-            SaveToFile();
-            return CreateSuccessResult();
-        } catch (Exception) {
-            return CreateErrorResult("Failed to set goal. Try later or text our support");
+            var entity = Map(userGoalDto);
+            _userGoalRepository.Add(entity);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to set goal");
         }
     }
 
-    public UserGoalDto GetByUserId(int userId) => _userGoals.FirstOrDefault(u => u.UserId == userId);
-
-    public UserGoalResultDto Delete(int userId) {
-        foreach (UserGoalDto goal in _userGoals) {
-            if (goal.UserId == userId) {
-                _userGoals.Remove(goal);
-                SaveToFile();
-                return CreateSuccessResult();
-            }
+    public ResultDto Delete(int userId)
+    {
+        var entity = _userGoalRepository.GetAll().FirstOrDefault(g => g.UserId == userId);
+        if (entity == null) {
+            return ResultDto.CreateFailedResult("Failed to delete goal");
         }
-        return CreateErrorResult("Failed to delete goal. Try later or text our support");
+        try {
+            _userGoalRepository.Delete(entity.Id);
+            return ResultDto.CreateSuccessResult();
+        } catch {
+            return ResultDto.CreateFailedResult("Failed to delete goal");
+        }
     }
+
+    public UserGoalDto GetByUserId(int userId) {
+        var entity = _userGoalRepository.GetAll().FirstOrDefault(g => g.UserId == userId);
+        if (entity == null) {
+            return null;
+        }
+        return Map(entity);
+    }
+
+    private UserGoalDto Map(UserGoalEntity entity) => new UserGoalDto {
+        StartDate = entity.StartDate,
+        Weight = entity.Weight,
+        InitialWeight = entity.InitialWeight,
+        Id = entity.Id,
+        UserId = entity.UserId
+    };
+
+    private UserGoalEntity Map(UserGoalDto dto) => new UserGoalEntity {
+        StartDate = dto.StartDate,
+        Weight = dto.Weight,
+        InitialWeight = dto.InitialWeight,
+        Id = dto.Id,
+        UserId = dto.UserId
+    };
 }
