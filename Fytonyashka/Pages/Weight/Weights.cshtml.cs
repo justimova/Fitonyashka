@@ -37,8 +37,8 @@ namespace Fytonyashka.Pages
         }
 
         public void OnGet() {
-            string userName = HttpContext.Session.GetString("UserName") ?? "";
-            var userDto = _userService.GetByUsername(userName);
+            string username = HttpContext.Session.GetString("Username") ?? "";
+            var userDto = _userService.GetByUsername(username);
             int userId = userDto.Id;
             Weights = _weightService.GetAllByUserId(userId)
                 .Select(w => new WeightInputModel {
