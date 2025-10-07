@@ -1,6 +1,7 @@
 ﻿@page
 @model Fytonyashka.Pages.Goal.GoalsModel
 @{
+    ViewData["Title"] = "Goals";
     bool hasValidationErrors = !ViewData.ModelState.IsValid;
 }
 
@@ -114,23 +115,24 @@
             </div>
         </div>
     </div>
+</div>
 
-    @section Scripts {
-        <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var toastEl = document.getElementById('goalToast');
-            if (toastEl.querySelector('.toast-body').textContent.trim() !== "") {
-                var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                toast.show();
-            }
+@section Scripts {
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var toastEl = document.getElementById('goalToast');
+        if (toastEl.querySelector('.toast-body').textContent.trim() !== "") {
+            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+        }
 
-            @if (hasValidationErrors)
-            {
-                <text>
-                var modal = new bootstrap.Modal(document.getElementById('modalSetGoal'));
-                modal.show();
-                </text>
-            }
-        });
-        </script>
-    }
+        @if (hasValidationErrors)
+        {
+            <text>
+            var modal = new bootstrap.Modal(document.getElementById('modalSetGoal'));
+            modal.show();
+            </text>
+        }
+    });
+    </script>
+}

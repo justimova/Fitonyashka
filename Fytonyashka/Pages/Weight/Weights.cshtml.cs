@@ -1,7 +1,6 @@
 using Fytonyashka.Core.DateRange;
 using Fytonyashka.DTOs;
 using Fytonyashka.DataModels;
-using Fytonyashka.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -37,8 +36,8 @@ namespace Fytonyashka.Pages
         }
 
         public void OnGet() {
-            string userName = HttpContext.Session.GetString("UserName") ?? "";
-            var userDto = _userService.GetByUsername(userName);
+            string username = HttpContext.Session.GetString("Username") ?? "";
+            var userDto = _userService.GetByUsername(username);
             int userId = userDto.Id;
             Weights = _weightService.GetAllByUserId(userId)
                 .Select(w => new WeightInputModel {

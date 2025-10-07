@@ -34,6 +34,9 @@
                             <li class="nav-item @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Weight/Weights" ? "active" : "")">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Weight/Weights">Your weight</a>
                             </li>
+                            <li class="nav-item @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Sleep/Sleep" ? "active" : "")">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Sleep/Sleep">Your sleep</a>
+                            </li>
                             <li class="nav-item @(ViewContext.RouteData.Values["Page"]?.ToString() == "/Weight/Bmi" ? "active" : "")">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Weight/Bmi">BMI</a>
                             </li>
