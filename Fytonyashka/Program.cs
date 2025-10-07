@@ -19,10 +19,12 @@ builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
 builder.Services.AddSingleton<IWeightDateRangeService, WeightDateRangeService>();
 builder.Services.AddSingleton<IUserGoalService, UserGoalService>();
+builder.Services.AddSingleton<ISleepService, SleepService>();
 builder.Services.AddTransient<IWeightRepository, WeightRepository>();
 builder.Services.AddTransient<IUserGoalRepository, UserGoalRepository>();
 builder.Services.AddTransient<IWeightDateRangeRepository, WeightDateRangeRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ISleepRepository, SleepRepository>();
 
 var app = builder.Build();
 
