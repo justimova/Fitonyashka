@@ -1,0 +1,56 @@
+<div class="login-container">
+  <div class="login-box">
+    <div class="login-header">
+      <h1>Fitonyashka</h1>
+      <p>Sign in to your account</p>
+    </div>
+
+    <form (ngSubmit)="onLogin()" [formGroup]="loginForm" class="login-form">
+
+      <!-- Username Input -->
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input
+          type="text"
+          formControlName="username"
+          class="form-input"
+          placeholder="Enter your username"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <!-- Password Input -->
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <div class="password-wrapper">
+            <input [type]="showPassword ? 'text' : 'password'"
+                   formControlName="password"
+                   class="form-input"
+                   placeholder="Enter your password"
+                   [disabled]="isLoading" />
+
+            <button type="button"
+                    class="toggle-password"
+                    (click)="togglePassword()"
+                    [disabled]="isLoading">
+                {{ showPassword ? '🙈' : '👁️' }}
+            </button>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-buttons">
+        <button
+          type="submit"
+          class="btn-login"
+          [disabled]="isLoading">
+          {{ isLoading ? 'Logging in...' : 'Login' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="login-footer">
+      <p>Don't have an account? <a href="/auth/register">Register here</a></p>
+    </div>
+  </div>
+</div>

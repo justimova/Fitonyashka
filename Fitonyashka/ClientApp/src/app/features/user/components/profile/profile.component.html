@@ -1,0 +1,129 @@
+@if (isDataLoading) {
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <img [src]="avatarUrl" alt="User Avatar" class="avatar">
+            <div class="user-info">
+                <h1>{{ userInfo.username }}</h1>
+                <p class="email">{{ userInfo.email }}</p>
+            </div>
+        </div>
+
+        <form (ngSubmit)="onEdit()" [formGroup]="editForm" class="profile-form">
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="text"
+                       formControlName="email"
+                       class="form-input"
+                       placeholder="Enter your email"
+                       [disabled]="isEditing" />
+                @if (checkError('email', 'required')) {
+                    <div class="error-message">
+                        The email field is required.
+                    </div>
+                }
+                @if (checkError('email', 'email')) {
+                    <div class="error-message">
+                        Please enter a valid email address.
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">First name</label>
+                <input type="text"
+                       formControlName="firstName"
+                       class="form-input"
+                       placeholder="Enter your first name"
+                       [disabled]="isEditing" />
+                @if (checkError('firstName', 'required')) {
+                    <div class="error-message">
+                        The first name field is required.
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Birthday</label>
+                <input type="date"
+                       formControlName="birthday"
+                       class="form-input"
+                       placeholder="Enter your Birthday"
+                       [disabled]="isEditing" />
+                @if (checkError('birthday', 'required')) {
+                    <div class="error-message">
+                        The birthday field is required.
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select formControlName="gender" [disabled]="isEditing">
+                    <option value="0" disabled>Select gender</option>
+                    <option value="1">Man</option>
+                    <option value="2">Woman</option>
+                    <option value="3">Other</option>
+                </select>
+                @if (checkError('gender', 'required')) {
+                    <div class="error-message">
+                        The gender field is required.
+                    </div>
+                }
+                @if (checkError('gender', 'pattern')) {
+                    <div class="error-message">
+                        Please select a valid gender.
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Height</label>
+                <input type="text"
+                       formControlName="height"
+                       class="form-input"
+                       placeholder="Enter your height"
+                       [disabled]="isEditing" />
+                @if (checkError('height', 'required')) {
+                    <div class="error-message">
+                        The height field is required.
+                    </div>
+                }
+                @if (checkError('height', 'pattern')) {
+                    <div class="error-message">
+                        Please enter a valid height (e.g., 180).
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Weight</label>
+                <input type="text"
+                       formControlName="weight"
+                       class="form-input"
+                       placeholder="Enter your weight"
+                       [disabled]="isEditing" />
+                @if (checkError('weight', 'required')) {
+                    <div class="error-message">
+                        The weight field is required.
+                    </div>
+                }
+                @if (checkError('weight', 'pattern')) {
+                    <div class="error-message">
+                        Please enter a valid weight (e.g., 75).
+                    </div>
+                }
+            </div>
+
+            <div class="profile-actions">
+                <button type="submit" [disabled]="isEditing" class="btn-edit">
+                    {{ isEditing ? 'Saving...' : 'Save Profile' }}
+                </button>
+                <button class="btn-change-password">Change Password</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+}

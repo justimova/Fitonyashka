@@ -1,0 +1,36 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Welcome back! Here's your fitness overview</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats" [style.border-left-color]="stat.color">
+      <div class="stat-icon" [style.color]="stat.color">
+        <i [class]="'fas ' + stat.icon"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{ stat.title }}</h3>
+        <p class="stat-value">{{ stat.value }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activities -->
+  <div class="activities-section">
+    <h2>Recent Activities</h2>
+    <div class="activities-list">
+      <div class="activity-item" *ngFor="let activity of recentActivities">
+        <div class="activity-info">
+          <h4>{{ activity.name }}</h4>
+          <p class="activity-date">{{ activity.date | date: 'MMM d, y' }}</p>
+        </div>
+        <div class="activity-duration">
+          {{ activity.duration }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

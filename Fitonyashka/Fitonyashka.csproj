@@ -1,0 +1,94 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.36" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.36">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.18" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\components\" />
+    <None Remove="ClientApp\src\app\components\layouts\" />
+    <None Remove="ClientApp\src\app\components\layouts\components\" />
+    <None Remove="ClientApp\src\app\components\pages\" />
+    <None Remove="ClientApp\src\app\components\pages\body\" />
+    <None Remove="ClientApp\src\app\components\pages\header\" />
+    <None Remove="Controllers\" />
+    <None Remove="ViewModels\" />
+    <None Remove="ViewModels\Account\" />
+    <None Remove="ClientApp\src\assets\UserImages\" />
+    <None Remove="ClientApp\src\app\components\shared\" />
+    <None Remove="Pages\.DS_Store" />
+    <None Remove="Pages\Shared\_Layout.cshtml.css" />
+    <None Remove="ViewModels\UserProfile\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\components\" />
+    <Folder Include="ClientApp\src\app\components\layouts\" />
+    <Folder Include="ClientApp\src\app\components\layouts\components\" />
+    <Folder Include="ClientApp\src\app\components\pages\" />
+    <Folder Include="ClientApp\src\app\components\pages\body\" />
+    <Folder Include="ClientApp\src\app\components\pages\header\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="ViewModels\Account\" />
+    <Folder Include="ClientApp\src\assets\UserImages\" />
+    <Folder Include="ClientApp\src\app\components\shared\" />
+    <Folder Include="ViewModels\UserProfile\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="ClientApp\package-lock.json" />
+    <Content Remove="Pages\Privacy.cshtml" />
+    <Content Remove="Pages\_ViewImports.cshtml" />
+    <Content Remove="Pages\Error.cshtml" />
+    <Content Remove="Pages\Index.cshtml" />
+    <Content Remove="Pages\_ViewStart.cshtml" />
+    <Content Remove="Pages\Weight\Bmi.cshtml" />
+    <Content Remove="Pages\Weight\Weights.cshtml" />
+    <Content Remove="Pages\Weight\Update.cshtml" />
+    <Content Remove="Pages\Weight\Create.cshtml" />
+    <Content Remove="Pages\Sleep\Sleep.cshtml" />
+    <Content Remove="Pages\User\Update.cshtml" />
+    <Content Remove="Pages\User\Create.cshtml" />
+    <Content Remove="Pages\User\Users.cshtml" />
+    <Content Remove="Pages\Shared\_Layout.cshtml" />
+    <Content Remove="Pages\Shared\_ValidationScriptsPartial.cshtml" />
+    <Content Remove="Pages\Account\SignUp.cshtml" />
+    <Content Remove="Pages\Account\UserProfile.cshtml" />
+    <Content Remove="Pages\Account\Logout.cshtml" />
+    <Content Remove="Pages\Account\Settings.cshtml" />
+    <Content Remove="Pages\Account\Login.cshtml" />
+    <Content Remove="Pages\Goal\Goals.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Pages\Privacy.cshtml.cs" />
+    <Compile Remove="Pages\Error.cshtml.cs" />
+    <Compile Remove="Pages\Index.cshtml.cs" />
+    <Compile Remove="Pages\Weight\Update.cshtml.cs" />
+    <Compile Remove="Pages\Weight\Create.cshtml.cs" />
+    <Compile Remove="Pages\Weight\Weights.cshtml.cs" />
+    <Compile Remove="Pages\Weight\Bmi.cshtml.cs" />
+    <Compile Remove="Pages\Sleep\Sleep.cshtml.cs" />
+    <Compile Remove="Pages\User\Update.cshtml.cs" />
+    <Compile Remove="Pages\User\Users.cshtml.cs" />
+    <Compile Remove="Pages\User\Create.cshtml.cs" />
+    <Compile Remove="Pages\Account\Login.cshtml.cs" />
+    <Compile Remove="Pages\Account\UserProfile.cshtml.cs" />
+    <Compile Remove="Pages\Account\Settings.cshtml.cs" />
+    <Compile Remove="Pages\Account\SignUp.cshtml.cs" />
+    <Compile Remove="Pages\Account\Logout.cshtml.cs" />
+    <Compile Remove="Pages\Goal\Goals.cshtml.cs" />
+  </ItemGroup>
+</Project>

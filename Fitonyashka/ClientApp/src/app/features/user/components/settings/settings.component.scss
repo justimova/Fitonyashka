@@ -1,0 +1,146 @@
+.settings-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.settings-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+
+  h1 {
+    color: #2c3e50;
+    margin: 0 0 2rem 0;
+    font-size: 2rem;
+  }
+}
+
+.settings-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #ecf0f1;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  h2 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .setting-info {
+    flex: 1;
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.25rem;
+    }
+
+    .description {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #7f8c8d;
+    }
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .select-input {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+  }
+}
+
+.settings-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-save {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+
+    &:hover {
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      transform: translateY(-2px);
+    }
+  }
+
+  .btn-reset {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+
+    &:hover {
+      background-color: #bdc3c7;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .settings-card {
+    padding: 1.5rem;
+  }
+
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    input[type="checkbox"],
+    .select-input {
+      width: 100%;
+    }
+
+    .select-input {
+      width: 100%;
+    }
+  }
+
+  .settings-actions {
+    flex-direction: column-reverse;
+  }
+}

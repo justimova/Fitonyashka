@@ -1,0 +1,4 @@
+<input type="file" accept="image/*" (change)="onFileSelected($event)" />
+<!-- <button (click)="onUpload()" [disabled]="!selectedFile">Загрузить</button> -->
+
+<img *ngIf="avatarUrl" [src]="avatarUrl" alt="avatar" width="120" height="120" />
