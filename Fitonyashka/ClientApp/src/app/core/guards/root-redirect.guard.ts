@@ -6,7 +6,7 @@ import { AccountService } from '../services/account/account.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class RootRedirectGuard implements CanActivate {
   constructor(private router: Router, private accountService: AccountService) {}
 
   canActivate(
@@ -16,10 +16,11 @@ export class AuthGuard implements CanActivate {
     const isAuthenticated = this.accountService.isLoggedIn();
 
     if (isAuthenticated) {
-      return true;
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/home']);
     }
 
-    this.router.navigate(['/home']);
     return false;
   }
 }

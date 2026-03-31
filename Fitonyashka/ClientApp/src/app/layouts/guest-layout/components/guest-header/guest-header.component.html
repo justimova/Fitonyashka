@@ -1,0 +1,18 @@
+<header class="app-header">
+  <div class="header-container">
+    <div class="logo">
+      <span>Fitonyashka</span>
+    </div>
+
+    <nav class="menu" [class.open]="menuOpen">
+      <ul class="menu-list">
+        <li>
+          <a [routerLink]="['/auth/login']" class="menu-link">Sign In</a>
+        </li>
+        <li>
+          <a [routerLink]="['/auth/register']" class="menu-link">Sign Up</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

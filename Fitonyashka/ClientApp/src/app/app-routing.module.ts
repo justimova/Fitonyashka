@@ -2,25 +2,38 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { UserLayoutComponent } from './layouts/user-layout/components/user-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/components/auth-layout.component';
+import { GuestLayoutComponent } from './layouts/guest-layout/components/guest-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { GuestGuard } from './core/guards/guest.guard';
 
 const routes: Routes = [
   {
-    path: 'auth',
-    component: AuthLayoutComponent,
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home',
+  },
+  {
+    path: 'home',
+    component: GuestLayoutComponent,
+    canActivate: [GuestGuard],
     children: [
       {
         path: '',
-        redirectTo: 'login',
-        pathMatch: 'full',
+        loadChildren: () => import('./features/guest/guest.module').then(m => m.GuestModule),
       },
+    ],
+  },
+  {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    canActivate: [GuestGuard],
+    children: [
       {
         path: '',
         loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
       },
     ],
   },
-
   {
     path: '',
     component: UserLayoutComponent,
@@ -37,11 +50,9 @@ const routes: Routes = [
       },
     ],
   },
-
-  // Wildcard route - must be last
   {
     path: '**',
-    redirectTo: '/dashboard',
+    redirectTo: '',
   },
 ];
 

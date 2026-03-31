@@ -8,6 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/components/auth-layout.component';
 import { UserLayoutComponent } from './layouts/user-layout/components/user-layout.component';
+import { GuestLayoutComponent } from './layouts/guest-layout/components/guest-layout.component';
+import { GuestHeaderComponent } from './layouts/guest-layout/components/guest-header/guest-header.component';
 import { HeaderComponent } from './layouts/user-layout/components/header/header.component';
 import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.interceptor';
 import { AuthInterceptor } from './core/interceptors/auth-interceptor';
@@ -19,7 +21,9 @@ import { NotificationService } from './core/services/notification.service';
     AppComponent,
     AuthLayoutComponent,
     UserLayoutComponent,
+    GuestLayoutComponent,
     HeaderComponent,
+    GuestHeaderComponent,
     AvatarUploadComponent,
   ],
   imports: [

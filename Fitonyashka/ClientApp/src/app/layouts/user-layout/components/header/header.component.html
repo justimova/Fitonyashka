@@ -10,16 +10,33 @@
           <a (click)="navigate('/dashboard')" class="menu-link">Dashboard</a>
         </li>
         <li>
-          <a (click)="navigate('/profile')" class="menu-link">Profile</a>
+          <a (click)="navigate('/weight')" class="menu-link">Weight</a>
         </li>
         <li>
-          <a (click)="navigate('/settings')" class="menu-link">Settings</a>
+          <a (click)="navigate('/bmi')" class="menu-link">BMI</a>
         </li>
         <li>
-          <a (click)="logout()" class="menu-link logout">Logout</a>
+          <a (click)="navigate('/sleep')" class="menu-link">Sleep</a>
+        </li>
+        <li>
+          <a (click)="navigate('/goals')" class="menu-link">Goals</a>
         </li>
       </ul>
     </nav>
+
+    <div class="user-menu-wrapper" (click)="$event.stopPropagation()">
+      <button class="user-button" (click)="toggleUserMenu($event)" [attr.aria-expanded]="userMenuOpen">
+        <img [src]="userAvatar" alt="Profile avatar" class="user-avatar" />
+        <span class="user-name">{{ userName }}</span>
+        <span class="caret">&#9662;</span>
+      </button>
+      <ul class="user-dropdown" *ngIf="userMenuOpen">
+        <li><a (click)="navigate('/profile')" class="menu-link">Profile</a></li>
+        <li><a (click)="navigate('/settings')" class="menu-link">Settings</a></li>
+        <li class="separator"></li>
+        <li><a (click)="logout()" class="menu-link logout">Logout</a></li>
+      </ul>
+    </div>
 
     <button class="hamburger" (click)="toggleMenu()" [class.active]="menuOpen">
       <span></span>

@@ -33,9 +33,17 @@ export class LoginComponent {
   onLogin(): void {
     this.isLoading = true;
     this.accountService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        this.router.navigate(['/dashboard']);
+      next: () => {
+        this.accountService.fetchCurrentUser().subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.router.navigate(['/dashboard']);
+          },
+          error: (error) => {
+            this.isLoading = false;
+            this.errorHandlingService.handleError(error, 'LOGIN_ERROR');
+          }
+        });
       },
       error: (error) => {
         this.isLoading = false;
