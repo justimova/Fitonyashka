@@ -33,6 +33,7 @@
     <None Remove="Pages\.DS_Store" />
     <None Remove="Pages\Shared\_Layout.cshtml.css" />
     <None Remove="ViewModels\UserProfile\" />
+    <None Remove="ViewModels\Bmi\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ClientApp\src\app\components\" />
@@ -47,6 +48,7 @@
     <Folder Include="ClientApp\src\assets\UserImages\" />
     <Folder Include="ClientApp\src\app\components\shared\" />
     <Folder Include="ViewModels\UserProfile\" />
+    <Folder Include="ViewModels\Bmi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="ClientApp\package-lock.json" />

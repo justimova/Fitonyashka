@@ -4,6 +4,14 @@
       <span>Fitonyashka</span>
     </div>
 
+    <nav class="menu-center">
+      <ul class="menu-list">
+        <li>
+          <a [routerLink]="['/home/public/bmi']" class="menu-link">BMI</a>
+        </li>
+      </ul>
+    </nav>
+
     <nav class="menu" [class.open]="menuOpen">
       <ul class="menu-list">
         <li>
@@ -14,5 +22,11 @@
         </li>
       </ul>
     </nav>
+
+    <button class="hamburger" (click)="toggleMenu()" [class.active]="menuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </header>

@@ -21,6 +21,10 @@ const routes: Routes = [
         path: '',
         loadChildren: () => import('./features/guest/guest.module').then(m => m.GuestModule),
       },
+      {
+        path: 'public',
+        loadChildren: () => import('./features/public/public.module').then(m => m.PublicModule),
+      },
     ],
   },
   {
@@ -47,6 +51,10 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./features/user/user.module').then(m => m.UserModule),
+      },
+      {
+        path: 'public',
+        loadChildren: () => import('./features/public/public.module').then(m => m.PublicModule),
       },
     ],
   },

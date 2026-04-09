@@ -1,0 +1,126 @@
+<main class="bmi-page">
+  <div class="page-header">
+    <div>
+      <h1>BMI Calculator</h1>
+      <p>Body Mass Index overview for current and custom values.</p>
+    </div>
+  </div>
+
+  @if (isLoggedIn) {
+  <div class="bmi-grid">
+    <section class="bmi-card current-bmi-card">
+      <div class="card-title">
+        <h2>Your BMI</h2>
+      </div>
+      <div class="current-bmi-value">
+        <span>0</span>
+      </div>
+      <div class="current-bmi-details">
+        <div>
+          <p class="detail-label">Weight</p>
+          <p class="detail-value">0 kg</p>
+        </div>
+        <div>
+          <p class="detail-label">Height</p>
+          <p class="detail-value">0 cm</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bmi-card custom-bmi-card">
+      <div class="card-title">
+        <h2>Custom BMI Calculator</h2>
+      </div>
+      <form class="calculator-form" [formGroup]="bmiForm" autocomplete="off">
+        <label>
+          <span>Weight (kg)</span>
+          <input type="number" min="0" formControlName="weight" />
+        </label>
+        <label>
+          <span>Height (cm)</span>
+          <input type="number" min="0" formControlName="height" />
+        </label>
+        <button type="button" (click)="onCalculate()">Calculate</button>
+      </form>
+      <div class="result-block">
+        <p>Calculated BMI</p>
+        <div class="result-value">{{ (calculatedBmi?.bmiValue ?? 0) | number:'1.0-2' }}</div>
+        @if (calculatedBmi?.bmiValue) {
+          <p class="result-category">{{ calculatedBmi?.bmiCategory }}</p>
+        }
+      </div>
+    </section>
+  </div>
+
+  <details class="info-block" open>
+    <summary>BMI ranges information</summary>
+    <div class="info-content">
+      <table>
+        <thead>
+          <tr>
+            <th>BMI range</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (range of bmiRanges; track range) {
+          <tr>
+            <td [innerHTML]="getRangeDisplay(range)"></td>
+            <td>{{ range.category }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </details>
+  } @else {
+  <div class="bmi-grid not-logged-in">
+    <section class="bmi-card custom-bmi-card">
+      <div class="card-title">
+        <h2>Custom BMI Calculator</h2>
+      </div>
+      <form class="calculator-form" [formGroup]="bmiForm" autocomplete="off">
+        <label>
+          <span>Weight (kg)</span>
+          <input type="number" min="0" formControlName="weight" />
+        </label>
+        <label>
+          <span>Height (cm)</span>
+          <input type="number" min="0" formControlName="height" />
+        </label>
+        <button type="button" (click)="onCalculate()">Calculate</button>
+      </form>
+      <div class="result-block">
+        <p>Calculated BMI</p>
+        <div class="result-value">{{ (calculatedBmi?.bmiValue ?? 0) | number:'1.2-2' }}</div>
+        @if (calculatedBmi?.bmiValue) {
+          <p class="result-category">{{ calculatedBmi?.bmiCategory }}</p>
+        }
+      </div>
+    </section>
+
+    <details class="info-block inline-info" open>
+      <summary>BMI ranges information</summary>
+      <div class="info-content">
+        <table>
+          <thead>
+            <tr>
+              <th>BMI range</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (range of bmiRanges; track range) {
+            <tr>
+              <td [innerHTML]="getRangeDisplay(range)"></td>
+              <td>{{ range.category }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+  }
+</main>
+

@@ -7,8 +7,6 @@ import { IUserInfo, IUserProfileUpdate } from "../../models/account/user";
   providedIn: 'root'
 })
 export class UserProfileService {
-  private tokenKey: string = 'auth_token';
-
   constructor(
     private http: HttpClient,
   ) { }
