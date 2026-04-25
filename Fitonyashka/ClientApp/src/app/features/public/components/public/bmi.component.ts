@@ -53,5 +53,3 @@ export class BmiComponent implements OnInit {
     }
   }
 }
-
-// на бэке сделать bmi controller создать bmi service и запрограмировать форму 

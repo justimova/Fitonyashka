@@ -1,25 +1,14 @@
 using System.Text;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.Services;
-using Fytonyashka.Services.Interfaces;
+using Fitonyashka.InfrastructureLayer.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IWeightService, WeightService>();
-builder.Services.AddSingleton<IFileService, FileService>();
-builder.Services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
-builder.Services.AddSingleton<IWeightDateRangeService, WeightDateRangeService>();
-builder.Services.AddSingleton<IUserGoalService, UserGoalService>();
-builder.Services.AddSingleton<ISleepService, SleepService>();
-builder.Services.AddTransient<IWeightRepository, WeightRepository>();
-builder.Services.AddTransient<IUserGoalRepository, UserGoalRepository>();
-builder.Services.AddTransient<IWeightDateRangeRepository, WeightDateRangeRepository>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<ISleepRepository, SleepRepository>();
+builder.Services.AddEnitityServices();
+builder.Services.AddRepositories();
+builder.Services.AddUserContext();
 
 builder.Services.AddControllers();
 var jwt = builder.Configuration.GetSection("Jwt");

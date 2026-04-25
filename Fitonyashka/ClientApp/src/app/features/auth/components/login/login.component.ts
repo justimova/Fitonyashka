@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ErrorHandlingService } from 'src/app/core/services/error-handling.service';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
@@ -6,13 +6,12 @@ import { AccountService } from 'src/app/core/services/account/account.service';
 
 @Component({
   selector: 'app-login',
-  standalone: false,
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  protected isLoading: boolean = false;
-  protected showPassword: boolean = false;
+  protected isLoading = false;
+  protected showPassword = false;
 
   protected loginForm = this.formBuilder.group({
     username: ['', Validators.required],
@@ -21,9 +20,9 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private errorHandlingService: ErrorHandlingService,
+    @Inject(ErrorHandlingService) private errorHandlingService: ErrorHandlingService,
     private formBuilder: UntypedFormBuilder,
-    private accountService: AccountService,
+    @Inject(AccountService) private accountService: AccountService,
   ) { }
 
   protected togglePassword(): void {
@@ -39,13 +38,13 @@ export class LoginComponent {
             this.isLoading = false;
             this.router.navigate(['/dashboard']);
           },
-          error: (error) => {
+          error: (error: any) => {
             this.isLoading = false;
             this.errorHandlingService.handleError(error, 'LOGIN_ERROR');
           }
         });
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
         this.errorHandlingService.handleError(error, 'LOGIN_ERROR');
       }

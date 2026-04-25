@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ErrorHandlingService, AppError } from './error-handling.service';
 
-declare var bootstrap: any;
+declare let bootstrap: any;
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 

@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { AccountService } from '../../../core/services/account/account.service';
 import { AvatarService } from 'src/app/core/services/account/avatar.service';
 
 @Component({
   selector: 'app-avatar-upload',
-  standalone: false,
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss'
 })
@@ -13,7 +12,7 @@ export class AvatarUploadComponent {
   avatarUrl: string | null = null;
   uploadProgress = 0;
 
-  constructor(private avatarService: AvatarService) { }
+  constructor(@Inject(AvatarService) private avatarService: AvatarService) { }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

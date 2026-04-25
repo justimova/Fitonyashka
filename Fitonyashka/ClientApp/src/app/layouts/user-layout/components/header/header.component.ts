@@ -5,7 +5,6 @@ import { AccountService } from 'src/app/core/services/account/account.service';
 
 @Component({
   selector: 'app-header',
-  standalone: false,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

@@ -1,0 +1,122 @@
+.weight-container {
+  padding: 1.5rem;
+}
+
+.weight-header {
+  margin-bottom: 1.5rem;
+}
+
+.weight-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+}
+
+.weight-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.weight-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.weight-cards {
+  display: grid;
+  gap: 1rem;
+}
+
+.weight-card {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.weight-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.weight-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.weight-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 220px;
+  text-align: center;
+}
+
+.weight-empty p {
+  margin: 0;
+  max-width: 28rem;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.btn {
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-add {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.btn-edit,
+.btn-delete {
+  background: transparent;
+  padding: 0.5rem;
+}
+
+.btn-edit .material-icons {
+  color: #4f46e5;
+}
+
+.btn-delete .material-icons {
+  color: #ef4444;
+}
+
+.btn,
+.btn-add,
+.btn-edit,
+.btn-delete {
+  transition: background 0.25s ease;
+}
+
+.btn-add:hover {
+  background: #4338ca;
+}
+
+.btn-edit:hover {
+  background-color: rgba(79, 70, 229, 0.08);
+}
+
+.btn-delete:hover {
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.weight-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.weight-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+}

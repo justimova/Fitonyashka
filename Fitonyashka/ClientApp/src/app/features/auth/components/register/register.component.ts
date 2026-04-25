@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountService } from 'src/app/core/services/account/account.service';
@@ -6,13 +6,12 @@ import { ErrorHandlingService } from 'src/app/core/services/error-handling.servi
 
 @Component({
   selector: 'app-register',
-  standalone: false,
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  protected isLoading: boolean = false;
-  protected showPassword: boolean = false;
+  protected isLoading = false;
+  protected showPassword = false;
   
   protected registerForm = this.formBuilder.group({
     username: ['', Validators.required],
@@ -22,9 +21,9 @@ export class RegisterComponent {
 
   constructor(
     private router: Router,
-    private errorHandlingService: ErrorHandlingService,
+    @Inject(ErrorHandlingService) private errorHandlingService: ErrorHandlingService,
     private formBuilder: UntypedFormBuilder,
-    private accountService: AccountService,
+    @Inject(AccountService) private accountService: AccountService,
   ) {}
 
   protected togglePassword(): void {
@@ -34,12 +33,12 @@ export class RegisterComponent {
   protected onRegister(): void {
     this.isLoading = true;
     this.accountService.register(this.registerForm.value).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.isLoading = false;
         this.errorHandlingService.handleSuccess('Account created successfully!');
         this.router.navigate(['/dashboard']);
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
         this.errorHandlingService.handleError(error, 'REGISTRATION_ERROR');
       }

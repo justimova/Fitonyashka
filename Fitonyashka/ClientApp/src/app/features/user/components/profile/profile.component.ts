@@ -11,9 +11,9 @@ import { UserProfileService } from 'src/app/core/services/account/user-profile.s
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
-  protected isEditing: boolean = false;
-  protected isDataLoading: boolean = false;
-  protected isLoading: boolean = false;
+  protected isEditing = false;
+  protected isDataLoading = false;
+  protected isLoading = false;
 
   protected userInfo!: IUserInfo;
 

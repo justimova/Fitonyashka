@@ -1,0 +1,56 @@
+<div class="weight-form">
+  <button type="button" class="close-button" aria-label="Close dialog" (click)="onClose()">×</button>
+  <h2>{{ title }}</h2>
+
+  @if (isLoading) {
+    <div class="form-loading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    <form [formGroup]="weightForm" (ngSubmit)="onSave()">
+      <div class="form-group">
+        <label class="form-label" for="date">Date</label>
+        <input
+          id="date"
+          type="date"
+          formControlName="date"
+          class="form-input"
+          [disabled]="isSaving"
+        />
+        <div *ngIf="checkError('date', 'required')" class="error-message">
+          The date field is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="weight">Weight (kg)</label>
+        <input
+          id="weight"
+          type="number"
+          formControlName="weight"
+          class="form-input"
+          placeholder="Enter your weight"
+          min="0"
+          max="500"
+          step="any"
+          [disabled]="isSaving"
+        />
+        <div *ngIf="checkError('weight', 'required')" class="error-message">
+          The weight field is required.
+        </div>
+        <div *ngIf="checkError('weight', 'min') || checkError('weight', 'max')" class="error-message">
+          Weight must be between 0 and 500 kg.
+        </div>
+      </div>
+
+      <div class="action-panel">
+        <button type="button" class="btn-cancel" (click)="onClose()">Cancel</button>
+        <button type="submit" class="btn-save" [disabled]="isSaving">
+          {{ isSaving ? 'Saving...' : 'Save' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>
