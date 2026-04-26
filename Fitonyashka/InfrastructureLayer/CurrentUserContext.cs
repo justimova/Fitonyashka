@@ -21,11 +21,13 @@ public class CurrentUserContext : ICurrentUserContext
             return null;
         }
         var userDto = _userService.GetByUsername(username);
+
         return userDto;
     }
 
     public int? GetCurrentUserId() {
         var userDto = GetCurrentUser();
+
         return userDto?.Id;
     }
 }

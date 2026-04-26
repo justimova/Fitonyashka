@@ -25,7 +25,6 @@ export class AccountService {
   }
 
   public fetchCurrentUser(): Observable<IUserInfo> {
-    // В backend current user endpoint используется /api/userProfile/currentUser
     return this.http.get<IUserInfo>('/api/userProfile/currentUser').pipe(
       tap(user => this.saveUser(user))
     );

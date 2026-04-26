@@ -1,3 +1,4 @@
+using Fitonyashka.InfrastructureLayer.Interfaces;
 using Fitonyashka.ViewModels;
 using Fitonyashka.ViewModels.UserProfile;
 using Fytonyashka.DTOs;
@@ -13,20 +14,22 @@ namespace Fitonyashka.Controllers;
 public class UserProfileController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ICurrentUserContext _currentUserContext;
 
-    public UserProfileController(IUserService userService) {
+    public UserProfileController(IUserService userService, ICurrentUserContext currentUserContext) {
         _userService = userService;
+        _currentUserContext = currentUserContext;
     }
 
     [HttpGet]
     [Route("currentUser")]
     [Authorize]
     public ActionResult<UserInfoViewModel> GetCurrentUser() {
-        var username = User.Identity?.Name; // get username from token claim
-        if (username.IsNullOrEmpty()) {
+        UserDto userDto = _currentUserContext.GetCurrentUser();
+        if (userDto == null) {
             return Unauthorized();
         }
-        var userDto = _userService.GetByUsername(username);
+
         return new UserInfoViewModel {
             UserId = userDto.Id,
             Email = userDto.Email,

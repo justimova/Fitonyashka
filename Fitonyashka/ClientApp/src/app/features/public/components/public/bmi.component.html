@@ -13,16 +13,19 @@
         <h2>Your BMI</h2>
       </div>
       <div class="current-bmi-value">
-        <span>0</span>
+        <span>{{ currentUserData.bmi?.bmiValue | number:'1.0-2' }}</span>
       </div>
+      @if (currentUserData.bmi) {
+        <p class="result-category">{{ currentUserData.bmi.bmiCategory }}</p>
+      }
       <div class="current-bmi-details">
         <div>
           <p class="detail-label">Weight</p>
-          <p class="detail-value">0 kg</p>
+          <p class="detail-value">{{ currentUserData.weight }} kg</p>
         </div>
         <div>
           <p class="detail-label">Height</p>
-          <p class="detail-value">0 cm</p>
+          <p class="detail-value">{{ currentUserData.height }} cm</p>
         </div>
       </div>
     </section>
