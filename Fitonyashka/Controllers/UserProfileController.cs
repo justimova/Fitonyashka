@@ -2,10 +2,10 @@ using Fitonyashka.InfrastructureLayer.Interfaces;
 using Fitonyashka.ViewModels;
 using Fitonyashka.ViewModels.UserProfile;
 using Fytonyashka.DTOs;
+using Fytonyashka.Services;
 using Fytonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Fitonyashka.Controllers;
 
@@ -15,10 +15,12 @@ public class UserProfileController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly ICurrentUserContext _currentUserContext;
+    private readonly IWeightService _weightService;
 
-    public UserProfileController(IUserService userService, ICurrentUserContext currentUserContext) {
+    public UserProfileController(IUserService userService, ICurrentUserContext currentUserContext, IWeightService weightService) {
         _userService = userService;
         _currentUserContext = currentUserContext;
+        _weightService = weightService;
     }
 
     [HttpGet]
@@ -30,6 +32,7 @@ public class UserProfileController : ControllerBase
             return Unauthorized();
         }
 
+        var weightDto = _weightService.GetLastByUserId(userDto.Id);
         return new UserInfoViewModel {
             UserId = userDto.Id,
             Email = userDto.Email,
@@ -38,7 +41,7 @@ public class UserProfileController : ControllerBase
             Birthday = DateOnly.FromDateTime(userDto.Birthday),
             Gender = userDto.Gender,
             Height = userDto.Height,
-            Weight = userDto.Weight,
+            Weight = weightDto?.Weight ?? 0m,
             AvatarFileName = userDto.AvatarFileName,
         };
     }
@@ -53,7 +56,6 @@ public class UserProfileController : ControllerBase
             Birthday = updateViewModel.Birthday.ToDateTime(TimeOnly.MinValue),
             Gender = updateViewModel.Gender,
             Height = updateViewModel.Height,
-            Weight = updateViewModel.Weight,
         };
 
         var resultDto = _userService.Update(userProfileDto);

@@ -10,7 +10,6 @@ public class UserEntity : IIdentifiable
     public DateTime Birthday { get; set; }
     public int Gender { get; set; }
     public int Height { get; set; }
-    public int Weight { get; set; }
     public string AvatarFileName { get; set; }
     public int SelectedDateRangeId { get; set; }
 }

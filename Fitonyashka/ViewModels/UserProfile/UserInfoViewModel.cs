@@ -9,7 +9,7 @@ public class UserInfoViewModel
     public DateOnly Birthday { get; set; }
     public int Gender { get; set; }
     public int Height { get; set; }
-    public int Weight { get; set; }
+    public decimal Weight { get; set; }
     public string AvatarFileName { get; set; }
     public int SelectedDateRangeId { get; set; } = 2;
 }

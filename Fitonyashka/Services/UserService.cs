@@ -153,7 +153,6 @@ public class UserService : IUserService {
         Birthday = entity.Birthday,
         Gender = entity.Gender,
         Height = entity.Height,
-        Weight = entity.Weight,
         AvatarFileName = entity.AvatarFileName,
         SelectedDateRangeId = entity.SelectedDateRangeId
     };
@@ -167,7 +166,6 @@ public class UserService : IUserService {
         Birthday = dto.Birthday,
         Gender = dto.Gender,
         Height = dto.Height,
-        Weight = dto.Weight,
         AvatarFileName = dto.AvatarFileName,
         SelectedDateRangeId = dto.SelectedDateRangeId
     };
