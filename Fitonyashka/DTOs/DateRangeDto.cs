@@ -1,4 +1,4 @@
-﻿namespace Fytonyashka.DTOs;
+﻿namespace Fitonyashka.DTOs;
 
 public class DateRangeDto
 {

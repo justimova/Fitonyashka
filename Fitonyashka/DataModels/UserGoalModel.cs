@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fytonyashka.DataModels;
+namespace Fitonyashka.DataModels;
 
 public class UserGoalModel
 {

@@ -1,9 +1,9 @@
-﻿using Fytonyashka.DataAccessLayer.Entities;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+﻿using Fitonyashka.DataAccessLayer.Entities;
+using Fitonyashka.DataAccessLayer.Repositories;
+using Fitonyashka.DTOs;
+using Fitonyashka.Services.Interfaces;
 
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
 public class SleepService : ISleepService
 {
@@ -14,7 +14,7 @@ public class SleepService : ISleepService
     }
 
     public ResultDto Create(SleepDto sleepDto) {
-        if(sleepDto.DateFrom >= sleepDto.DateTo) {
+        if (sleepDto.DateFrom >= sleepDto.DateTo) {
             return ResultDto.CreateFailedResult("Bedtime should be earlier than wake-up time");
         }
         try {
@@ -42,18 +42,15 @@ public class SleepService : ISleepService
 
     public List<SleepDto> GetAllByUserId(int userId) => GetAll().Where(w => w.UserId == userId).ToList();
 
-    public SleepDto GetById(int id)
-    {
+    public SleepDto GetById(int id) {
         throw new NotImplementedException();
     }
 
-    public SleepDto GetLastByUserId(int userId)
-    {
+    public SleepDto GetLastByUserId(int userId) {
         throw new NotImplementedException();
     }
 
-    public ResultDto Update(SleepDto sleepDto)
-    {
+    public ResultDto Update(SleepDto sleepDto) {
         throw new NotImplementedException();
     }
 

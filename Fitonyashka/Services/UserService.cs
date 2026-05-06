@@ -1,16 +1,17 @@
-﻿using Fytonyashka.DataAccessLayer.Entities;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+﻿using Fitonyashka.DataAccessLayer.Entities;
+using Fitonyashka.DataAccessLayer.Repositories;
+using Fitonyashka.DTOs;
+using Fitonyashka.Services.Interfaces;
 
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
-public class UserService : IUserService {
+public class UserService : IUserService
+{
     private readonly IUserRepository _userRepository;
 
     private static readonly Dictionary<Type, Func<UserEntity, IUserDto, UserEntity>> _mapDelegates = new() {
-        { typeof(UserDto), (UserEntity e, IUserDto d) => Map(e, (UserDto)d) },
-        { typeof(UserProfileDto), (UserEntity e, IUserDto d) => Map(e, (UserProfileDto)d) },
+        { typeof(UserDto), (e, d) => Map(e, (UserDto)d) },
+        { typeof(UserProfileDto), (e, d) => Map(e, (UserProfileDto)d) },
     };
 
     public UserService(IUserRepository userRepository) {
@@ -92,8 +93,7 @@ public class UserService : IUserService {
         return result;
     }
 
-    private ResultDto Update<TDto>(TDto userDto)
-            where TDto : class, IUserDto {
+    private ResultDto Update<TDto>(TDto userDto) where TDto : class, IUserDto {
         if (userDto.Id <= 0) {
             return ResultDto.CreateFailedResult("A user isn't exist or access denied");
         }
@@ -113,7 +113,7 @@ public class UserService : IUserService {
             return ResultDto.CreateFailedResult("Failed to update user account");
         }
     }
-    
+
     public ResultDto Update(UserDto userDto) {
         return Update<UserDto>(userDto);
     }
@@ -148,7 +148,7 @@ public class UserService : IUserService {
         Id = entity.Id,
         UserName = entity.UserName,
         Email = entity.Email,
-        Password = entity.Password, 
+        Password = entity.Password,
         FirstName = entity.FirstName,
         Birthday = entity.Birthday,
         Gender = entity.Gender,

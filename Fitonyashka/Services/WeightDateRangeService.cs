@@ -1,27 +1,24 @@
-﻿using Fytonyashka.DataAccessLayer.Entities;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+﻿using Fitonyashka.DataAccessLayer.Entities;
+using Fitonyashka.DataAccessLayer.Repositories;
+using Fitonyashka.DTOs;
+using Fitonyashka.Services.Interfaces;
 
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
 internal class WeightDateRangeService : IWeightDateRangeService
 {
     private readonly IWeightDateRangeRepository _weightDateRangeRepository;
 
-    public WeightDateRangeService(IWeightDateRangeRepository weightDateRangeRepository)
-    {
+    public WeightDateRangeService(IWeightDateRangeRepository weightDateRangeRepository) {
         _weightDateRangeRepository = weightDateRangeRepository;
     }
 
-    public List<DateRangeDto> GetAll()
-    {
+    public List<DateRangeDto> GetAll() {
         var entities = _weightDateRangeRepository.GetAll().OrderByDescending(d => d.Position);
         return entities.Select(Map).ToList();
     }
 
-    public DateRangeDto GetById(int id)
-    {
+    public DateRangeDto GetById(int id) {
         var entity = _weightDateRangeRepository.GetAll().FirstOrDefault(d => d.Id == id);
         if (entity == null) {
             return null;

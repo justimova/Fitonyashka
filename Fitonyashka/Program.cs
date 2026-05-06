@@ -1,4 +1,5 @@
 using System.Text;
+using Fitonyashka.InfrastructureLayer;
 using Fitonyashka.InfrastructureLayer.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -10,7 +11,11 @@ builder.Services.AddEnitityServices();
 builder.Services.AddRepositories();
 builder.Services.AddUserContext();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => {
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+    });
 var jwt = builder.Configuration.GetSection("Jwt");
 var keyBytes = Encoding.UTF8.GetBytes(jwt["Key"]!);
 

@@ -1,9 +1,9 @@
-﻿using Fytonyashka.DataAccessLayer.Entities;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+﻿using Fitonyashka.DataAccessLayer.Entities;
+using Fitonyashka.DataAccessLayer.Repositories;
+using Fitonyashka.DTOs;
+using Fitonyashka.Services.Interfaces;
 
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
 public class WeightService : IWeightService
 {

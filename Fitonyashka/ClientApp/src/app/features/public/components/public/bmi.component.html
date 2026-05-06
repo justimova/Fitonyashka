@@ -7,7 +7,7 @@
   </div>
 
   @if (isLoggedIn) {
-  <div class="bmi-grid">
+  <div class="bmi-grid auth-grid">
     <section class="bmi-card current-bmi-card">
       <div class="card-title">
         <h2>Your BMI</h2>
@@ -36,12 +36,12 @@
       </div>
       <form class="calculator-form" [formGroup]="bmiForm" autocomplete="off">
         <label>
-          <span>Weight (kg)</span>
-          <input type="number" min="0" formControlName="weight" />
-        </label>
-        <label>
           <span>Height (cm)</span>
           <input type="number" min="0" formControlName="height" />
+        </label>
+        <label>
+          <span>Weight (kg)</span>
+          <input type="number" min="0" formControlName="weight" />
         </label>
         <button type="button" (click)="onCalculate()">Calculate</button>
       </form>
@@ -53,57 +53,11 @@
         }
       </div>
     </section>
-  </div>
 
-  <details class="info-block" open>
-    <summary>BMI ranges information</summary>
-    <div class="info-content">
-      <table>
-        <thead>
-          <tr>
-            <th>BMI range</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (range of bmiRanges; track range) {
-          <tr>
-            <td [innerHTML]="getRangeDisplay(range)"></td>
-            <td>{{ range.category }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </details>
-  } @else {
-  <div class="bmi-grid not-logged-in">
-    <section class="bmi-card custom-bmi-card">
+    <section class="bmi-card info-block">
       <div class="card-title">
-        <h2>Custom BMI Calculator</h2>
+        <h2>BMI ranges information</h2>
       </div>
-      <form class="calculator-form" [formGroup]="bmiForm" autocomplete="off">
-        <label>
-          <span>Weight (kg)</span>
-          <input type="number" min="0" formControlName="weight" />
-        </label>
-        <label>
-          <span>Height (cm)</span>
-          <input type="number" min="0" formControlName="height" />
-        </label>
-        <button type="button" (click)="onCalculate()">Calculate</button>
-      </form>
-      <div class="result-block">
-        <p>Calculated BMI</p>
-        <div class="result-value">{{ (calculatedBmi?.bmiValue ?? 0) | number:'1.2-2' }}</div>
-        @if (calculatedBmi?.bmiValue) {
-          <p class="result-category">{{ calculatedBmi?.bmiCategory }}</p>
-        }
-      </div>
-    </section>
-
-    <details class="info-block inline-info" open>
-      <summary>BMI ranges information</summary>
       <div class="info-content">
         <table>
           <thead>
@@ -122,7 +76,111 @@
           </tbody>
         </table>
       </div>
-    </details>
+    </section>
+
+    <section class="bmi-card weight-calculator-card">
+      <div class="card-title">
+        <h2>Weight Calculator</h2>
+      </div>
+      <form class="calculator-form" [formGroup]="weightCalculatorForm" autocomplete="off">
+        <label>
+          <span>Height (cm)</span>
+          <input type="number" min="0" formControlName="height" />
+          @if (checkError('height', 'required', 'weight') || checkError('height', 'min', 'weight')) {
+            <span class="input-error">Please enter a valid height.</span>
+          }
+        </label>
+        <label>
+          <span>BMI value</span>
+          <input type="number" min="0" formControlName="bmiValue" />
+          @if (checkError('bmiValue', 'required', 'weight') || checkError('bmiValue', 'min', 'weight') || checkError('bmiValue', 'max', 'weight')) {
+            <span class="input-error">Please enter a BMI value between 0.1 and 100.</span>
+          }
+        </label>
+        <button type="button" (click)="onCalculateWeight()">Calculate</button>
+      </form>
+      <div class="result-block">
+        <p>Calculated weight</p>
+        <div class="result-value">{{ (calculatedWeight ?? 0) | number:'1.0-2' }} kg</div>
+      </div>
+    </section>
+  </div>
+  } @else {
+  <div class="bmi-grid not-logged-in">
+    <section class="bmi-card custom-bmi-card">
+      <div class="card-title">
+        <h2>Custom BMI Calculator</h2>
+      </div>
+      <form class="calculator-form" [formGroup]="bmiForm" autocomplete="off">
+        <label>
+          <span>Height (cm)</span>
+          <input type="number" min="0" formControlName="height" />
+        </label>
+        <label>
+          <span>Weight (kg)</span>
+          <input type="number" min="0" formControlName="weight" />
+        </label>
+        <button type="button" (click)="onCalculate()">Calculate</button>
+      </form>
+      <div class="result-block">
+        <p>Calculated BMI</p>
+        <div class="result-value">{{ (calculatedBmi?.bmiValue ?? 0) | number:'1.2-2' }}</div>
+        @if (calculatedBmi?.bmiValue) {
+          <p class="result-category">{{ calculatedBmi?.bmiCategory }}</p>
+        }
+      </div>
+    </section>
+
+    <section class="bmi-card weight-calculator-card">
+      <div class="card-title">
+        <h2>Weight Calculator</h2>
+      </div>
+      <form class="calculator-form" [formGroup]="weightCalculatorForm" autocomplete="off">
+        <label>
+          <span>Height (cm)</span>
+          <input type="number" min="0" formControlName="height" />
+          @if (checkError('height', 'required', 'weight') || checkError('height', 'min', 'weight')) {
+            <span class="input-error">Please enter a valid height.</span>
+          }
+        </label>
+        <label>
+          <span>BMI value</span>
+          <input type="number" min="0" formControlName="bmiValue" />
+          @if (checkError('bmiValue', 'required', 'weight') || checkError('bmiValue', 'min', 'weight') || checkError('bmiValue', 'max', 'weight')) {
+            <span class="input-error">Please enter a BMI value between 0.1 and 100.</span>
+          }
+        </label>
+        <button type="button" (click)="onCalculateWeight()">Calculate</button>
+      </form>
+      <div class="result-block">
+        <p>Calculated weight</p>
+        <div class="result-value">{{ (calculatedWeight ?? 0) | number:'1.0-2' }} kg</div>
+      </div>
+    </section>
+
+    <section class="bmi-card info-block full-width">
+      <div class="card-title">
+        <h2>BMI ranges information</h2>
+      </div>
+      <div class="info-content">
+        <table>
+          <thead>
+            <tr>
+              <th>BMI range</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (range of bmiRanges; track range) {
+            <tr>
+              <td [innerHTML]="getRangeDisplay(range)"></td>
+              <td>{{ range.category }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
   }
 </main>

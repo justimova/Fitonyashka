@@ -1,4 +1,6 @@
-﻿namespace Fytonyashka.Core;
+﻿using Fitonyashka.Services.Interfaces;
+
+namespace Fitonyashka.Services;
 
 public class BmiRange
 {
@@ -7,9 +9,9 @@ public class BmiRange
     public string Category { get; set; }
 }
 
-public class Bmi
+public class BmiService : IBmiService
 {
-    public static List<BmiRange> BmiRanges => new() {
+    private static List<BmiRange> BmiRanges => new() {
         new BmiRange { Min = 0, Max = 16, Category = "Severe underweight" },
         new BmiRange { Min = 16, Max = 18.5M, Category = "Underweight" },
         new BmiRange { Min = 18.5M, Max = 25, Category = "Normal" },
@@ -19,12 +21,14 @@ public class Bmi
         new BmiRange { Min = 40, Max = decimal.MaxValue, Category = "Obesity class III" }
     };
 
-    public int Height { get; set; } = 0;
-    public decimal Weight { get; set; } = 0;
-    public decimal BmiValue {
-        get => Height <= 0 || Weight <= 0 ? 0 : (Weight * 10000) / (Height * Height); 
-    }
-    public string BmiCategory {
-        get => BmiRanges.FirstOrDefault(r => BmiValue >= r.Min && BmiValue < r.Max)?.Category ?? string.Empty;
-    }
+    public string GetBmiCategory(decimal bmi) =>
+        BmiRanges.FirstOrDefault(r => bmi >= r.Min && bmi < r.Max)?.Category ?? string.Empty;
+
+    public IReadOnlyCollection<BmiRange> GetBmiCategories() => BmiRanges;
+
+    public decimal CalculateBmi(int height, decimal weight) =>
+        height <= 0 || weight <= 0 ? 0 : weight * 10000 / (height * height);
+
+    public decimal CalculateWeight(int height, decimal bmi) =>
+        height <= 0 || bmi <= 0 ? 0 : bmi * height * height / 10000;
 }

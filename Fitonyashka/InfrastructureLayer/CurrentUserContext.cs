@@ -1,6 +1,6 @@
 ﻿using Fitonyashka.InfrastructureLayer.Interfaces;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+using Fitonyashka.Services.Interfaces;
+using Fitonyashka.DTOs;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Fitonyashka.InfrastructureLayer;

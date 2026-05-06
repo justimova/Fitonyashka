@@ -1,8 +1,8 @@
 using Fitonyashka.InfrastructureLayer.Interfaces;
 using Fitonyashka.ViewModels;
 using Fitonyashka.ViewModels.Weight;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+using Fitonyashka.DTOs;
+using Fitonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitonyashka.Controllers

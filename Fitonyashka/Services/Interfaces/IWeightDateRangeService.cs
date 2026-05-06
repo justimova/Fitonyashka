@@ -1,6 +1,6 @@
-﻿using Fytonyashka.DTOs;
+﻿using Fitonyashka.DTOs;
 
-namespace Fytonyashka.Services.Interfaces;
+namespace Fitonyashka.Services.Interfaces;
 
 public interface IWeightDateRangeService
 {

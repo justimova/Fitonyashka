@@ -13,7 +13,9 @@ import { ICalculatedBmi, IBmiRange } from 'src/app/core/models/bmi/bmi';
 export class BmiComponent implements OnInit {
   protected isLoggedIn = false;
   protected bmiForm: FormGroup;
+  protected weightCalculatorForm: FormGroup;
   protected calculatedBmi: ICalculatedBmi | null = null;
+  protected calculatedWeight: number | null = null;
   protected bmiRanges: IBmiRange[] = [];
   protected currentUserData: { weight: number; height: number; bmi: ICalculatedBmi | null } = { weight: 0, height: 0, bmi: null };
 
@@ -24,8 +26,13 @@ export class BmiComponent implements OnInit {
     private fb: FormBuilder,
   ) {
     this.bmiForm = this.fb.group({
-      weight: [0, [Validators.min(0)]],
-      height: [0, [Validators.min(0)]],
+      weight: [0, [Validators.required, Validators.min(0.1)]],
+      height: [0, [Validators.required, Validators.min(0.1)]],
+    });
+
+    this.weightCalculatorForm = this.fb.group({
+      height: [0, [Validators.required, Validators.min(0.1)]],
+      bmiValue: [0, [Validators.required, Validators.min(0.1), Validators.max(100)]],
     });
   }
 
@@ -38,6 +45,8 @@ export class BmiComponent implements OnInit {
         this.userProfileService.getCurrentUser().subscribe(user => {
           this.currentUserData.weight = user.weight;
           this.currentUserData.height = user.height;
+          this.weightCalculatorForm.patchValue({ height: user.height });
+          this.bmiForm.patchValue({ height: user.height });
           this.bmiService.calculate(this.currentUserData.height, this.currentUserData.weight)
             .subscribe(result => {
               this.currentUserData.bmi = result;
@@ -48,6 +57,11 @@ export class BmiComponent implements OnInit {
   }
 
   protected onCalculate(): void {
+    if (this.bmiForm.invalid) {
+      this.bmiForm.markAllAsTouched();
+      return;
+    }
+
     const weight = Number(this.bmiForm.get('weight')?.value) || 0;
     const height = Number(this.bmiForm.get('height')?.value) || 0;
 
@@ -55,6 +69,29 @@ export class BmiComponent implements OnInit {
       .subscribe(result => {
         this.calculatedBmi = result;
       });
+  }
+
+  protected onCalculateWeight(): void {
+    if (this.weightCalculatorForm.invalid) {
+      this.weightCalculatorForm.markAllAsTouched();
+      return;
+    }
+
+    const height = Number(this.weightCalculatorForm.get('height')?.value) || 0;
+    const bmiValue = Number(this.weightCalculatorForm.get('bmiValue')?.value) || 0;
+
+    this.bmiService.calculateWeight(height, bmiValue)
+      .subscribe(result => {
+        this.calculatedWeight = typeof result === 'number'
+          ? result
+          : result?.weight ?? null;
+      });
+  }
+
+  protected checkError(controlName: string, errorName: string, formName: 'bmi' | 'weight' = 'bmi'): boolean {
+    const formGroup = formName === 'bmi' ? this.bmiForm : this.weightCalculatorForm;
+    const control = formGroup.get(controlName);
+    return control ? control.hasError(errorName) && control.touched : false;
   }
 
   protected getRangeDisplay(range: IBmiRange): string {

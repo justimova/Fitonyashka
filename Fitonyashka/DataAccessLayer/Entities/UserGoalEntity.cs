@@ -1,4 +1,4 @@
-﻿namespace Fytonyashka.DataAccessLayer.Entities;
+﻿namespace Fitonyashka.DataAccessLayer.Entities;
 
 public class UserGoalEntity : IIdentifiable
 {

@@ -1,11 +1,10 @@
 using Fitonyashka.InfrastructureLayer.Interfaces;
 using Fitonyashka.ViewModels;
 using Fitonyashka.ViewModels.UserProfile;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services;
-using Fytonyashka.Services.Interfaces;
+using Fitonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Fitonyashka.DTOs;
 
 namespace Fitonyashka.Controllers;
 

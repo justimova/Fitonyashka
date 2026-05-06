@@ -105,5 +105,3 @@ export class ProfileComponent implements OnInit {
     });
   }
 }
-//  изменение удвление и добавления аватарки 
-// сделать changepassword

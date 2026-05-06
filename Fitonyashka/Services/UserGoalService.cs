@@ -1,9 +1,9 @@
-﻿using Fytonyashka.DataAccessLayer.Entities;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.DTOs;
-using Fytonyashka.Services.Interfaces;
+﻿using Fitonyashka.DataAccessLayer.Entities;
+using Fitonyashka.DataAccessLayer.Repositories;
+using Fitonyashka.DTOs;
+using Fitonyashka.Services.Interfaces;
 
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
 public class UserGoalService : IUserGoalService
 {
@@ -13,19 +13,18 @@ public class UserGoalService : IUserGoalService
         _userGoalRepository = userGoalRepository;
     }
 
-    public ResultDto Create(UserGoalDto userGoalDto)
-    {
+    public ResultDto Create(UserGoalDto userGoalDto) {
         try {
             var entity = Map(userGoalDto);
             _userGoalRepository.Add(entity);
             return ResultDto.CreateSuccessResult();
         } catch {
+        
             return ResultDto.CreateFailedResult("Failed to set goal");
         }
     }
 
-    public ResultDto Delete(int userId)
-    {
+    public ResultDto Delete(int userId) {
         var entity = _userGoalRepository.GetAll().FirstOrDefault(g => g.UserId == userId);
         if (entity == null) {
             return ResultDto.CreateFailedResult("Failed to delete goal");

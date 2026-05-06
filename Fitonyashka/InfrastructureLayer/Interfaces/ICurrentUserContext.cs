@@ -1,4 +1,4 @@
-﻿using Fytonyashka.DTOs;
+﻿using Fitonyashka.DTOs;
 
 namespace Fitonyashka.InfrastructureLayer.Interfaces;
 

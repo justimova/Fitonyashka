@@ -1,4 +1,4 @@
-﻿namespace Fytonyashka.DataModels;
+﻿namespace Fitonyashka.DataModels;
 
 public class WeeklyWeightGroup
 {

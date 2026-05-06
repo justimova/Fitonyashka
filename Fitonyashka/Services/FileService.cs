@@ -1,14 +1,15 @@
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
 public interface IFileService
 {
-    Task<string> UploadFileAsync(string dirName, int id, IFormFile? file);
+    Task<string> UploadFileAsync(string dirName, int id, IFormFile file);
     Task DeleteFileAsync(string dirName, string fileName);
 }
 
 internal class FileService : IFileService
 {
-    public async Task<string> UploadFileAsync(string dirName, int userId, IFormFile? file) {
+    public async Task<string> UploadFileAsync(string dirName, int userId, IFormFile file) {
+    
         string filePath = null;
         if (file != null && file.Length > 0) {
             string baseDirectory = Directory.GetCurrentDirectory();

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Fytonyashka.DataModels;
+namespace Fitonyashka.DataModels;
 
 public class UserProfileInputModel
 {
@@ -25,5 +25,5 @@ public class UserProfileInputModel
     [EmailAddress(ErrorMessage = "Invalid format of Email")]
     public string Email { get; set; }
 
-    public string? AvatarFileName { get; set; }
+    public string AvatarFileName { get; set; }
 }

@@ -1,6 +1,6 @@
-﻿using Fytonyashka.DataAccessLayer.Entities;
+﻿using Fitonyashka.DataAccessLayer.Entities;
 
-namespace Fytonyashka.DataAccessLayer.Repositories;
+namespace Fitonyashka.DataAccessLayer.Repositories;
 
 public interface IUserGoalRepository
 {

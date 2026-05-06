@@ -1,5 +1,5 @@
-﻿using Fytonyashka.Services;
-using Fytonyashka.Services.Interfaces;
+﻿using Fitonyashka.Services;
+using Fitonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

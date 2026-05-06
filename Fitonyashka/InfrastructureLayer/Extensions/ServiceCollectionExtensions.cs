@@ -1,20 +1,21 @@
 ﻿using Fitonyashka.InfrastructureLayer.Interfaces;
-using Fytonyashka.DataAccessLayer.Repositories;
-using Fytonyashka.Services;
-using Fytonyashka.Services.Interfaces;
+using Fitonyashka.Services;
+using Fitonyashka.Services.Interfaces;
+using Fitonyashka.DataAccessLayer.Repositories;
 
 namespace Fitonyashka.InfrastructureLayer.Extensions;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddEnitityServices(this IServiceCollection services) {
-        services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IWeightService, WeightService>();
-        services.AddSingleton<IFileService, FileService>();
-        services.AddSingleton<IStaticFilePublisher, StaticFilePublisher>();
-        services.AddSingleton<IWeightDateRangeService, WeightDateRangeService>();
-        services.AddSingleton<IUserGoalService, UserGoalService>();
-        services.AddSingleton<ISleepService, SleepService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IWeightService, WeightService>();
+        services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IStaticFilePublisher, StaticFilePublisher>();
+        services.AddScoped<IWeightDateRangeService, WeightDateRangeService>();
+        services.AddScoped<IUserGoalService, UserGoalService>();
+        services.AddScoped<ISleepService, SleepService>();
+        services.AddScoped<IBmiService, BmiService>();
 
         return services;
     }

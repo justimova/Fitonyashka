@@ -1,4 +1,4 @@
-namespace Fytonyashka.Services;
+namespace Fitonyashka.Services;
 
 public interface IStaticFilePublisher
 {

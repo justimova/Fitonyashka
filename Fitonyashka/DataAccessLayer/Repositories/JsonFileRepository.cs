@@ -1,15 +1,19 @@
 ﻿using System.Text.Json;
-using Fytonyashka.DataAccessLayer.Entities;
+using Fitonyashka.InfrastructureLayer;
+using Fitonyashka.DataAccessLayer.Entities;
 
-namespace Fytonyashka.DataAccessLayer.Repositories;
+namespace Fitonyashka.DataAccessLayer.Repositories;
 
-internal abstract class JsonFileRepository<TEntity> where TEntity: class, IIdentifiable
+internal abstract class JsonFileRepository<TEntity> where TEntity : class, IIdentifiable
 {
     private int _nextId = 1;
     private readonly string _dataFilePath;
     private List<TEntity> _entities = new();
 
-    public JsonFileRepository() {
+    private static readonly JsonSerializerOptions JsonOptions = JsonSerializationOptions.Default;
+
+    public JsonFileRepository()
+    {
         string baseDirectory = Directory.GetCurrentDirectory();
         string dataDirectory = Path.Combine(baseDirectory, "Data");
         if (!Directory.Exists(dataDirectory)) {
@@ -58,7 +62,7 @@ internal abstract class JsonFileRepository<TEntity> where TEntity: class, IIdent
 
     private void Load() {
         string entitiesJson = File.ReadAllText(_dataFilePath);
-        _entities = JsonSerializer.Deserialize<List<TEntity>>(entitiesJson) ?? new List<TEntity> ();
+        _entities = JsonSerializer.Deserialize<List<TEntity>>(entitiesJson, JsonOptions) ?? new List<TEntity>();
         InitializeNextId();
     }
 
@@ -71,8 +75,7 @@ internal abstract class JsonFileRepository<TEntity> where TEntity: class, IIdent
     }
 
     private void SaveToFile() {
-        string entitiesJson = JsonSerializer.Serialize(_entities,
-            new JsonSerializerOptions { WriteIndented = true });
+        string entitiesJson = JsonSerializer.Serialize(_entities, JsonOptions);
         File.WriteAllText(_dataFilePath, entitiesJson);
     }
 }
