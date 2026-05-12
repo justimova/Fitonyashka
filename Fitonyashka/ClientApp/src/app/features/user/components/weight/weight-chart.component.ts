@@ -9,27 +9,45 @@ import { IWeight } from 'src/app/core/models/weight/weight';
   styleUrl: './weight-chart.component.scss'
 })
 export class WeightChartComponent {
-  @Input() public entries: IWeight[] = [];
-  
-  protected get chartData(): ChartConfiguration<'line'>['data'] {
-    return {
-      labels: this.entries.map(x => x.date),
+  private _entries: IWeight[] = [];
+
+  public chartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        label: 'Weight',
+        data: []
+      }
+    ]
+  };
+
+  public chartOptions: ChartConfiguration<'line'>['options'] = {
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  };
+
+  @Input()
+  public set entries(value: IWeight[]) {
+    this._entries = value ?? [];
+    this.updateChartData();
+  }
+
+  public get entries(): IWeight[] {
+    return this._entries;
+  }
+
+  private updateChartData(): void {
+    this.chartData = {
+      labels: this._entries.map(x => x.date),
       datasets: [
         {
           label: 'Weight',
-          data: this.entries.map(x => x.weight)
+          data: this._entries.map(x => x.weight)
         }
       ]
-    };
-  }
-
-  protected get chartOptions(): ChartConfiguration<'line'>['options'] {
-    return {
-      plugins: {
-        legend: {
-          display: false
-        }
-      }
     };
   }
 }
