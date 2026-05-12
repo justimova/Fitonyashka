@@ -15,6 +15,7 @@ import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.int
 import { AuthInterceptor } from './core/interceptors/auth-interceptor';
 import { AvatarUploadComponent } from './components/shared/avatar-upload/avatar-upload.component';
 import { NotificationService } from './core/services/notification.service';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { NotificationService } from './core/services/notification.service';
       multi: true
     },
     NotificationService,
+    provideCharts(withDefaultRegisterables()),
   ],
   bootstrap: [ AppComponent ]
 })
