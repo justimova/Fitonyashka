@@ -8,11 +8,17 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { ErrorHandlingService } from '../services/error-handling.service';
+import { AccountService } from '../services/account/account.service';
 
 @Injectable()
 export class ErrorHandlingInterceptor implements HttpInterceptor {
-  constructor(private errorHandlingService: ErrorHandlingService) {}
+  constructor(
+    private errorHandlingService: ErrorHandlingService,
+    private router: Router,
+    private accountService: AccountService
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
@@ -23,6 +29,8 @@ export class ErrorHandlingInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           errorCode = 'UNAUTHORIZED';
           message = 'Your session has expired. Please log in again.';
+          this.accountService.logout();
+          this.router.navigate(['/auth/login']);
         } else if (error.status === 403) {
           errorCode = 'FORBIDDEN';
           message = 'You do not have permission to perform this action.';
