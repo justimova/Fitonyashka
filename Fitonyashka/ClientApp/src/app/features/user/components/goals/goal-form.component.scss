@@ -1,6 +1,8 @@
-.weight-form {
+.goal-form {
   position: relative;
   padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
   background: #ffffff;
 }
 
@@ -22,7 +24,7 @@
   background: rgba(55, 65, 81, 0.08);
 }
 
-.weight-form h2 {
+.goal-form h2 {
   margin: 0 0 0.75rem;
 }
 

@@ -4,11 +4,13 @@ using Fitonyashka.ViewModels.Weight;
 using Fitonyashka.DTOs;
 using Fitonyashka.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fitonyashka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WeightController : ControllerBase
     {
         private readonly IWeightService _weightService;
@@ -53,14 +55,14 @@ namespace Fitonyashka.Controllers
                 UserId = currentUserId.Value,
             };
             ResultDto result = _weightService.Create(weightDto);
-            var resultviewModel = new ResultViewModel {
+            var resultViewModel = new ResultViewModel {
                 ErrorMessage = result.ErrorMessage,
                 IsSuccess = result.IsSuccess,
             };
-            if (!resultviewModel.IsSuccess) {
-                return BadRequest(resultviewModel);
+            if (!resultViewModel.IsSuccess) {
+                return BadRequest(resultViewModel);
             }
-            return Ok(resultviewModel);
+            return Ok(resultViewModel);
         }
 
         [HttpPut]

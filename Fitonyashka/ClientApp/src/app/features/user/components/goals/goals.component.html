@@ -1,0 +1,79 @@
+<div class="goals-container">
+  <!-- Overlay backdrop -->
+  <div class="goals-overlay" *ngIf="expandedGoalType" (click)="onTileClose()"></div>
+
+  <div class="goals-header">
+    <div class="goals-header-content">
+      <div>
+        <h1>Goals</h1>
+        <p>Set and track your fitness goals to stay motivated.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="goals-grid">
+    <!-- Weight Goal Tile -->
+    <div class="goal-tile" [class.expanded]="expandedGoalType === 'weight'">
+      <button class="tile-expand-btn" (click)="onTileExpand('weight')" title="Expand">
+        <span class="material-symbols-outlined">{{ expandedGoalType === 'weight' ? 'close_fullscreen' : 'pan_zoom' }}</span>
+      </button>
+      <div class="tile-header">
+        <div class="tile-icon" [style.background-color]="'#e0e7ff'">
+          <i class="fas fa-weight-scale" [style.color]="'#4f46e5'"></i>
+        </div>
+      </div>
+      <div class="tile-content">
+        <h3 class="tile-title">Weight</h3>
+        <p class="tile-value">{{ currentGoal?.targetWeight ? currentGoal!.targetWeight + ' kg' : '--' }}</p>
+      </div>
+    </div>
+
+    <!-- Bed Time Goal Tile -->
+    <div class="goal-tile" [class.expanded]="expandedGoalType === 'bedTime'">
+      <button class="tile-expand-btn" (click)="onTileExpand('bedTime')" title="Expand">
+        <span class="material-symbols-outlined">{{ expandedGoalType === 'bedTime' ? 'close_fullscreen' : 'pan_zoom' }}</span>
+      </button>
+      <div class="tile-header">
+        <div class="tile-icon" [style.background-color]="'#dcfce7'">
+          <i class="fas fa-bed" [style.color]="'#10b981'"></i>
+        </div>
+      </div>
+      <div class="tile-content">
+        <h3 class="tile-title">Bed time</h3>
+        <p class="tile-value">--</p>
+      </div>
+    </div>
+
+    <!-- Wake Up Time Goal Tile -->
+    <div class="goal-tile" [class.expanded]="expandedGoalType === 'wakeUpTime'">
+      <button class="tile-expand-btn" (click)="onTileExpand('wakeUpTime')" title="Expand">
+        <span class="material-symbols-outlined">{{ expandedGoalType === 'wakeUpTime' ? 'close_fullscreen' : 'pan_zoom' }}</span>
+      </button>
+      <div class="tile-header">
+        <div class="tile-icon" [style.background-color]="'#fef3c7'">
+          <i class="fas fa-sun" [style.color]="'#f59e0b'"></i>
+        </div>
+      </div>
+      <div class="tile-content">
+        <h3 class="tile-title">Wake up time</h3>
+        <p class="tile-value">--</p>
+      </div>
+    </div>
+
+    <!-- Sleep Duration Goal Tile -->
+    <div class="goal-tile" [class.expanded]="expandedGoalType === 'sleepDuration'">
+      <button class="tile-expand-btn" (click)="onTileExpand('sleepDuration')" title="Expand">
+        <span class="material-symbols-outlined">{{ expandedGoalType === 'sleepDuration' ? 'close_fullscreen' : 'pan_zoom' }}</span>
+      </button>
+      <div class="tile-header">
+        <div class="tile-icon" [style.background-color]="'#e0e7ff'">
+          <i class="fas fa-clock" [style.color]="'#6366f1'"></i>
+        </div>
+      </div>
+      <div class="tile-content">
+        <h3 class="tile-title">Sleep duration</h3>
+        <p class="tile-value">--</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,57 +5,58 @@ using Fitonyashka.Services.Interfaces;
 
 namespace Fitonyashka.Services;
 
-public class UserGoalService : IUserGoalService
+public class GoalService : IGoalService
 {
-    private readonly IUserGoalRepository _userGoalRepository;
+    private readonly IGoalRepository _goalRepository;
 
-    public UserGoalService(IUserGoalRepository userGoalRepository) {
-        _userGoalRepository = userGoalRepository;
+    public GoalService(IGoalRepository goalRepository) {
+        _goalRepository = goalRepository;
     }
 
-    public ResultDto Create(UserGoalDto userGoalDto) {
+    public ResultDto Create(GoalDto goalDto) {
         try {
-            var entity = Map(userGoalDto);
-            _userGoalRepository.Add(entity);
+            var entity = Map(goalDto);
+            _goalRepository.Add(entity);
+
             return ResultDto.CreateSuccessResult();
         } catch {
-        
             return ResultDto.CreateFailedResult("Failed to set goal");
         }
     }
 
-    public ResultDto Delete(int userId) {
-        var entity = _userGoalRepository.GetAll().FirstOrDefault(g => g.UserId == userId);
+    public ResultDto Delete(int goalId) {
+        var entity = _goalRepository.GetAll().FirstOrDefault(g => g.Id == goalId);
         if (entity == null) {
             return ResultDto.CreateFailedResult("Failed to delete goal");
         }
         try {
-            _userGoalRepository.Delete(entity.Id);
+            _goalRepository.Delete(entity.Id);
             return ResultDto.CreateSuccessResult();
         } catch {
             return ResultDto.CreateFailedResult("Failed to delete goal");
         }
     }
 
-    public UserGoalDto GetByUserId(int userId) {
-        var entity = _userGoalRepository.GetAll().FirstOrDefault(g => g.UserId == userId);
+    public GoalDto GetActiveGoalByUserId(int userId) {
+        var entity = _goalRepository.GetAll().FirstOrDefault(g => g.UserId == userId && g.EndDate == null);
         if (entity == null) {
             return null;
         }
+
         return Map(entity);
     }
 
-    private UserGoalDto Map(UserGoalEntity entity) => new UserGoalDto {
+    private GoalDto Map(GoalEntity entity) => new GoalDto {
         StartDate = entity.StartDate,
-        Weight = entity.Weight,
+        TargetWeight = entity.TargetWeight,
         InitialWeight = entity.InitialWeight,
         Id = entity.Id,
         UserId = entity.UserId
     };
 
-    private UserGoalEntity Map(UserGoalDto dto) => new UserGoalEntity {
+    private GoalEntity Map(GoalDto dto) => new GoalEntity {
         StartDate = dto.StartDate,
-        Weight = dto.Weight,
+        TargetWeight = dto.TargetWeight,
         InitialWeight = dto.InitialWeight,
         Id = dto.Id,
         UserId = dto.UserId

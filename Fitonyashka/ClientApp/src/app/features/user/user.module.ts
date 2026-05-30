@@ -9,6 +9,8 @@ import { WeightChartComponent } from './components/weight/weight-chart.component
 import { MatDialogModule } from '@angular/material/dialog';
 import { WeightFormComponent } from './components/weight/weight-form.component';
 import { BaseChartDirective } from 'ng2-charts';
+import { GoalsComponent } from './components/goals/goals.component';
+import { GoalFormComponent } from './components/goals/goal-form.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { BaseChartDirective } from 'ng2-charts';
     WeightComponent,
     WeightFormComponent,
     WeightChartComponent,
+    GoalsComponent,
+    GoalFormComponent,
   ],
   imports: [
     CommonModule,

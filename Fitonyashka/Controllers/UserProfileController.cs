@@ -10,6 +10,7 @@ namespace Fitonyashka.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserProfileController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -24,7 +25,6 @@ public class UserProfileController : ControllerBase
 
     [HttpGet]
     [Route("currentUser")]
-    [Authorize]
     public ActionResult<UserInfoViewModel> GetCurrentUser() {
         UserDto userDto = _currentUserContext.GetCurrentUser();
         if (userDto == null) {
@@ -46,7 +46,6 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize]
     public ActionResult<ResultViewModel> UpdateUserProfile([FromBody] UserUpdateViewModel updateViewModel) {
         UserProfileDto userProfileDto = new UserProfileDto {
             Id = updateViewModel.UserId,

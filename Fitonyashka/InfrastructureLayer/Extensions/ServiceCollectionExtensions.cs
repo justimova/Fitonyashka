@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IStaticFilePublisher, StaticFilePublisher>();
         services.AddScoped<IWeightDateRangeService, WeightDateRangeService>();
-        services.AddScoped<IUserGoalService, UserGoalService>();
+        services.AddScoped<IGoalService, GoalService>();
         services.AddScoped<ISleepService, SleepService>();
         services.AddScoped<IBmiService, BmiService>();
 
@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddRepositories(this IServiceCollection services) {
         services.AddTransient<IWeightRepository, WeightRepository>();
-        services.AddTransient<IUserGoalRepository, UserGoalRepository>();
+        services.AddTransient<IGoalRepository, GoalRepository>();
         services.AddTransient<IWeightDateRangeRepository, WeightDateRangeRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ISleepRepository, SleepRepository>();

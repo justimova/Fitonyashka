@@ -1,0 +1,53 @@
+<div class="goal-form">
+  <button type="button" class="close-button" aria-label="Close dialog" (click)="onClose()">×</button>
+  <h2>{{ title }}</h2>
+
+  @if (isLoading) {
+    <div class="form-loading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    <form [formGroup]="goalForm" (ngSubmit)="onSave()">
+      <div class="form-group">
+        <label class="form-label" for="currentWeight">Current weight (kg)</label>
+        <input
+          id="currentWeight"
+          type="number"
+          formControlName="currentWeight"
+          class="form-input"
+          [disabled]="true"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="targetWeight">Target weight (kg)</label>
+        <input
+          id="targetWeight"
+          type="number"
+          formControlName="targetWeight"
+          class="form-input"
+          placeholder="Enter your goal weight"
+          min="0"
+          max="500"
+          step="any"
+          [disabled]="isSaving"
+        />
+        <div *ngIf="checkError('targetWeight', 'required')" class="error-message">
+          The target weight field is required.
+        </div>
+        <div *ngIf="checkError('targetWeight', 'min') || checkError('targetWeight', 'max')" class="error-message">
+          Target weight must be between 0 and 500 kg.
+        </div>
+      </div>
+
+      <div class="action-panel">
+        <button type="button" class="btn-cancel" (click)="onClose()">Cancel</button>
+        <button type="submit" class="btn-save" [disabled]="isSaving">
+          {{ isSaving ? 'Setting...' : 'Set' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

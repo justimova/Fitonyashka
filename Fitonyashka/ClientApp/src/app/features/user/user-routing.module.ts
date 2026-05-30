@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WeightComponent } from './components/weight/weight.component';
+import { GoalsComponent } from './components/goals/goals.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'weight',
     component: WeightComponent,
+  },
+  {
+    path: 'goals',
+    component: GoalsComponent,
   },
   {
     path: 'profile',
