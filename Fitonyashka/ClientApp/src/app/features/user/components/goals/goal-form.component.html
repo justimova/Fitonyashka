@@ -1,6 +1,14 @@
 <div class="goal-form">
   <button type="button" class="close-button" aria-label="Close dialog" (click)="onClose()">×</button>
-  <h2>{{ title }}</h2>
+  <div class="header">
+    <div class="icon-container">
+      <svg class="weight-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="16" height="16" rx="4" fill="currentColor" opacity="0.2"/>
+        <circle cx="12" cy="12" r="3" fill="currentColor"/>
+      </svg>
+    </div>
+    <h2>Weight</h2>
+  </div>
 
   @if (isLoading) {
     <div class="form-loading">
@@ -11,18 +19,28 @@
   } @else {
     <form [formGroup]="goalForm" (ngSubmit)="onSave()">
       <div class="form-group">
-        <label class="form-label" for="currentWeight">Current weight (kg)</label>
+        <label class="form-label" for="currentWeight">Start weight</label>
         <input
           id="currentWeight"
           type="number"
           formControlName="currentWeight"
           class="form-input"
-          [disabled]="true"
+          placeholder="Enter your start weight"
+          min="0.1"
+          max="500"
+          step="any"
+          [disabled]="isSaving"
         />
+        <div *ngIf="checkError('currentWeight', 'required')" class="error-message">
+          The start weight field is required.
+        </div>
+        <div *ngIf="checkError('currentWeight', 'min')" class="error-message">
+          Start weight must be greater than 0.
+        </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="targetWeight">Target weight (kg)</label>
+        <label class="form-label" for="targetWeight">Goal weight</label>
         <input
           id="targetWeight"
           type="number"
@@ -37,15 +55,49 @@
         <div *ngIf="checkError('targetWeight', 'required')" class="error-message">
           The target weight field is required.
         </div>
-        <div *ngIf="checkError('targetWeight', 'min') || checkError('targetWeight', 'max')" class="error-message">
-          Target weight must be between 0 and 500 kg.
+        <div *ngIf="checkError('targetWeight', 'min')" class="error-message">
+          Target weight must be greater than 0.
+        </div>
+        <div *ngIf="checkError('targetWeight', 'max')" class="error-message">
+          Target weight must be less than 500 kg.
+        </div>
+        <div *ngIf="checkError('targetWeight', 'sameAsInitial')" class="error-message">
+          Goal weight must be different from start weight.
         </div>
       </div>
 
+      <div class="info-section">
+        <div class="info-row">
+          <span class="info-label">Current weight:</span>
+          <span class="info-value">{{ currentWeight }} kg</span>
+        </div>
+        @if (isGainingWeight) {
+          <div class="info-row">
+            <span class="info-label">Gained:</span>
+            <span class="info-value">{{ weightChanged }} kg</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Left to gain:</span>
+            <span class="info-value">{{ weightRemaining }} kg</span>
+          </div>
+        } @else {
+          <div class="info-row">
+            <span class="info-label">Lost:</span>
+            <span class="info-value">{{ weightChanged }} kg</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Left to lose:</span>
+            <span class="info-value">{{ weightRemaining }} kg</span>
+          </div>
+        }
+      </div>
+
       <div class="action-panel">
-        <button type="button" class="btn-cancel" (click)="onClose()">Cancel</button>
         <button type="submit" class="btn-save" [disabled]="isSaving">
-          {{ isSaving ? 'Setting...' : 'Set' }}
+          {{ isSaving ? 'Saving...' : 'Save' }}
+        </button>
+        <button type="button" class="btn-reset" (click)="onReset()" [disabled]="isSaving || goalId === null">
+          Reset goal
         </button>
       </div>
     </form>

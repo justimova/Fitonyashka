@@ -1,11 +1,13 @@
 import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs/operators';
 import { UserProfileService } from 'src/app/core/services/account/user-profile.service';
 import { GoalService } from 'src/app/core/services/goal/goal.service';
 import { IGoalInfo } from 'src/app/core/models/goal/goal';
 import { GoalFormComponent } from './goal-form.component';
 import { ErrorHandlingService } from 'src/app/core/services/error-handling.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-goals',
@@ -26,6 +28,7 @@ export class GoalsComponent implements OnInit {
     private userProfileService: UserProfileService,
     private goalService: GoalService,
     private errorHandlingService: ErrorHandlingService,
+    private notificationService: NotificationService,
   ) { }
 
   public ngOnInit(): void {
@@ -43,6 +46,7 @@ export class GoalsComponent implements OnInit {
       autoFocus: false,
       disableClose: true,
       data: {
+        goalId: this.currentGoal?.id ?? null,
         currentWeight: this.currentWeight,
       },
     };
@@ -73,6 +77,7 @@ export class GoalsComponent implements OnInit {
             this.currentGoal = null;
             this.isLoading = false;
             this.errorHandlingService.handleResponse(response);
+            this._loadCurrentGoal();
           },
           error: (error) => {
             this.isLoading = false;
@@ -83,15 +88,57 @@ export class GoalsComponent implements OnInit {
   }
 
   public onTileExpand(goalType: string): void {
-    if (this.expandedGoalType === goalType) {
-      this.expandedGoalType = null;
-    } else {
-      this.expandedGoalType = goalType;
+    if (this.currentWeight === null) {
+      return;
     }
+
+    this.goalService.completeGoalIfNeeded()
+      .pipe(
+        switchMap((goalCompleted) => {
+          if (goalCompleted) {
+            this.notificationService.showSuccessWithLink(
+              'Congratulations! You have achieved your goal!',
+              'Set a New Goal',
+              '/goals'
+            );
+          }
+          return this._getCurrentGoalObservable();
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (goal) => {
+          this.currentGoal = goal;
+          this._openGoalDialog();
+        },
+        error: (error) => {
+          console.error('Error checking goal achievement:', error);
+          this._openGoalDialog();
+        }
+      });
   }
 
-  public onTileClose(): void {
-    this.expandedGoalType = null;
+  private _openGoalDialog(): void {
+    const dialogConfig = {
+      width: '500px',
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        goalId: this.currentGoal?.id ?? null,
+        currentWeight: this.currentWeight,
+      },
+    };
+
+    this._matDialog
+      .open(GoalFormComponent, dialogConfig)
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(response => {
+        if (response) {
+          this._loadCurrentWeight();
+          this._loadCurrentGoal();
+        }
+      });
   }
 
   private _loadCurrentWeight(): void {
@@ -123,10 +170,8 @@ export class GoalsComponent implements OnInit {
         }
       });
   }
-}
 
-// бэкенд установка целей, после установки цели как отображать на странице, кнопка цель достигнута, кнопка удалить
-// 1. если веса в профиле нет то в окне указать input для ввода веса на текушую дату если вес в профиле есть то этот инпут disable
-// 3. если цель достигнута то на странице веса при добавлении новой цели писать поздравлялку и предлагать установить новую цель, если цель не достигнута то на странице веса показывать сколько осталось до цели
-// сделать норм отображение
-// реализовать эдит цели.
+  private _getCurrentGoalObservable() {
+    return this.goalService.getCurrentGoal();
+  }
+}

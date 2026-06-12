@@ -9,7 +9,5 @@ public interface IWeightDateRangeRepository
 
 internal class WeightDateRangeRepository : JsonFileRepository<WeightDateRangeEntity>, IWeightDateRangeRepository
 {
-    protected override string GetEntityName() {
-        return "weightDateRange";
-    }
+    protected override string GetEntityName() => "weightDateRange";
 }

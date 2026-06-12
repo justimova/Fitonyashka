@@ -4,14 +4,13 @@ namespace Fitonyashka.DataAccessLayer.Repositories;
 
 public interface IGoalRepository
 {
-    List<GoalEntity> GetAll();
-    void Delete(int id);
     void Add(GoalEntity entity);
+    void Update(GoalEntity entity);
+    void Delete(int id);
+    List<GoalEntity> GetAll();
 }
 
 internal class GoalRepository : JsonFileRepository<GoalEntity>, IGoalRepository
 {
-    protected override string GetEntityName() {
-        return "goal";
-    }
+    protected override string GetEntityName() => "goal";
 }

@@ -25,19 +25,19 @@
     <None Remove="ClientApp\src\app\components\pages\" />
     <None Remove="ClientApp\src\app\components\pages\body\" />
     <None Remove="ClientApp\src\app\components\pages\header\" />
-    <None Remove="Controllers\" />
-    <None Remove="ViewModels\" />
-    <None Remove="ViewModels\Account\" />
     <None Remove="ClientApp\src\assets\UserImages\" />
     <None Remove="ClientApp\src\app\components\shared\" />
     <None Remove="Pages\.DS_Store" />
     <None Remove="Pages\Shared\_Layout.cshtml.css" />
-    <None Remove="ViewModels\UserProfile\" />
-    <None Remove="ViewModels\Bmi\" />
-    <None Remove="ViewModels\Weight\" />
     <None Remove="InfrastructureLayer\" />
     <None Remove="InfrastructureLayer\Interfaces\" />
     <None Remove="InfrastructureLayer\Extensions\" />
+    <None Remove="PresentationLayer\" />
+    <None Remove="PresentationLayer\Controllers\" />
+    <None Remove="PresentationLayer\ViewModels\" />
+    <None Remove="BusinessLogicLayer\" />
+    <None Remove="BusinessLogicLayer\Core\" />
+    <None Remove="BusinessLogicLayer\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ClientApp\src\app\components\" />
@@ -46,17 +46,17 @@
     <Folder Include="ClientApp\src\app\components\pages\" />
     <Folder Include="ClientApp\src\app\components\pages\body\" />
     <Folder Include="ClientApp\src\app\components\pages\header\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="ViewModels\Account\" />
     <Folder Include="ClientApp\src\assets\UserImages\" />
     <Folder Include="ClientApp\src\app\components\shared\" />
-    <Folder Include="ViewModels\UserProfile\" />
-    <Folder Include="ViewModels\Bmi\" />
-    <Folder Include="ViewModels\Weight\" />
     <Folder Include="InfrastructureLayer\" />
     <Folder Include="InfrastructureLayer\Interfaces\" />
     <Folder Include="InfrastructureLayer\Extensions\" />
+    <Folder Include="PresentationLayer\" />
+    <Folder Include="PresentationLayer\Controllers\" />
+    <Folder Include="PresentationLayer\ViewModels\" />
+    <Folder Include="BusinessLogicLayer\" />
+    <Folder Include="BusinessLogicLayer\Core\" />
+    <Folder Include="BusinessLogicLayer\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="ClientApp\package-lock.json" />

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { ErrorHandlingService, AppError } from './error-handling.service';
 
 declare let bootstrap: any;
@@ -12,12 +13,78 @@ export class NotificationService {
   private readonly containerId = 'app-toast-container';
   private readonly defaultDurationMs = 5000;
 
-  constructor(errorHandling: ErrorHandlingService) {
+  constructor(
+    errorHandling: ErrorHandlingService,
+    private router: Router,
+  ) {
     console.log('NotificationService constructor called');
     errorHandling.errors$.subscribe(error => {
       console.log('Error received in NotificationService:', error);
       this.handleAppError(error);
     });
+  }
+
+  public showSuccessWithLink(
+    message: string,
+    linkText: string,
+    linkUrl: string,
+    title?: string,
+    durationMs: number = this.defaultDurationMs
+  ): void {
+    console.log(`Showing success toast with link: ${title ? title + ': ' : ''}${message}`);
+    const container = this.getOrCreateContainer();
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-success border-0 shadow-sm`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+    toast.style.minWidth = '280px';
+    toast.style.marginBottom = '0.5rem';
+    toast.style.pointerEvents = 'auto';
+
+    toast.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">
+          ${title ? `<strong>${this.escapeHtml(title)}</strong><br/>` : ''}
+          ${this.escapeHtml(message)}
+          <br/>
+          <a href="${this.escapeHtml(linkUrl)}" style="color: white; text-decoration: underline; font-weight: 500;">
+            ${this.escapeHtml(linkText)}
+          </a>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"></button>
+      </div>
+    `;
+
+    const closeBtn = toast.querySelector('button');
+    closeBtn?.addEventListener('click', () => this.removeToast(toast));
+
+    const link = toast.querySelector('a');
+    link?.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.removeToast(toast);
+      this.router.navigateByUrl(linkUrl);
+    });
+
+    container.appendChild(toast);
+
+    // Initialize Bootstrap Toast
+    if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+      const bsToast = new bootstrap.Toast(toast, { autohide: true, delay: durationMs });
+      bsToast.show();
+
+      // Remove after hide
+      toast.addEventListener('hidden.bs.toast', () => {
+        toast.remove();
+      });
+    } else {
+      console.warn('Bootstrap Toast not available, falling back to manual show');
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 200);
+      }, durationMs);
+    }
   }
 
   private handleAppError(error: AppError): void {

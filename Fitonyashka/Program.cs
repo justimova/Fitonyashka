@@ -30,7 +30,7 @@ builder.Services
           ValidIssuer = jwt["Issuer"],
           ValidAudience = jwt["Audience"],
           IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-          ClockSkew = TimeSpan.Zero
+          ClockSkew = TimeSpan.Zero,
       };
   });
 builder.Services.AddAuthorization();

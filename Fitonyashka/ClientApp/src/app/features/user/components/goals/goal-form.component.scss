@@ -1,6 +1,6 @@
 .goal-form {
   position: relative;
-  padding: 1rem;
+  padding: 1.5rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   background: #ffffff;
@@ -24,8 +24,35 @@
   background: rgba(55, 65, 81, 0.08);
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.icon-container {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #4f9b96;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.weight-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+}
+
 .goal-form h2 {
-  margin: 0 0 0.75rem;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
 }
 
 .form-group {
@@ -52,42 +79,80 @@
   font-size: 0.875rem;
 }
 
+.info-section {
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 0;
+  margin: 1.5rem 0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
 .action-panel {
   display: flex;
-  justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 1.5rem;
 }
 
-.btn-cancel,
-.btn-save {
-  min-width: 100px;
+.btn-save,
+.btn-reset {
+  flex: 1;
   padding: 0.75rem 1rem;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background 0.25s ease;
-}
-
-.btn-cancel {
-  background: #f3f4f6;
-  color: #111827;
+  font-weight: 500;
 }
 
 .btn-save {
-  background: #4f46e5;
+  background: #4f9b96;
   color: #ffffff;
+
+  &:hover:not([disabled]) {
+    background: #408b87;
+  }
+
+  &[disabled] {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 }
 
-.btn-cancel:hover {
-  background: #e5e7eb;
-}
+.btn-reset {
+  background: #ffffff;
+  color: #d44545;
+  border: 1.5px solid #d44545;
 
-.btn-save:hover {
-  background: #4338ca;
-}
+  &:hover:not([disabled]) {
+    background: #fef2f2;
+  }
 
-.btn-save[disabled] {
-  opacity: 0.65;
-  cursor: not-allowed;
+  &[disabled] {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 }

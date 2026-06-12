@@ -1,7 +1,7 @@
 ﻿using Fitonyashka.InfrastructureLayer.Interfaces;
-using Fitonyashka.Services.Interfaces;
-using Fitonyashka.DTOs;
 using Microsoft.IdentityModel.Tokens;
+using Fitonyashka.Models;
+using Fitonyashka.BusinessLogicLayer.Services.Interfaces;
 
 namespace Fitonyashka.InfrastructureLayer;
 
@@ -15,7 +15,7 @@ public class CurrentUserContext : ICurrentUserContext
         _userService = userService;
     }
 
-    public UserDto GetCurrentUser() {
+    public UserModel GetCurrentUser() {
         var username = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
         if (username.IsNullOrEmpty()) {
             return null;

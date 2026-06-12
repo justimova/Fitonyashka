@@ -1,9 +1,9 @@
-﻿using Fitonyashka.DTOs;
+﻿using Fitonyashka.Models;
 
 namespace Fitonyashka.InfrastructureLayer.Interfaces;
 
 public interface ICurrentUserContext
 {
-    UserDto GetCurrentUser();
+    UserModel GetCurrentUser();
     int? GetCurrentUserId();
 }

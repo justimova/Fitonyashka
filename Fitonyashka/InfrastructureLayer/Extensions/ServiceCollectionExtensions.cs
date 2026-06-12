@@ -1,7 +1,7 @@
 ﻿using Fitonyashka.InfrastructureLayer.Interfaces;
-using Fitonyashka.Services;
-using Fitonyashka.Services.Interfaces;
 using Fitonyashka.DataAccessLayer.Repositories;
+using Fitonyashka.BusinessLogicLayer.Services.Interfaces;
+using Fitonyashka.BusinessLogicLayer.Services;
 
 namespace Fitonyashka.InfrastructureLayer.Extensions;
 
